@@ -15,6 +15,7 @@ black = "*"
 requests = "*"
 flask-jwt-extended = "*"
 flask-marshmallow = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"
