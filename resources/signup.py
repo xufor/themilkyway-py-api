@@ -15,8 +15,8 @@ class SignUp(Resource):
         inactive_user_object = inactive_schema.load(incoming_data, db.session)
         discovered_entry = InactiveModel.find_entry_by_email(inactive_user_object.email)
 
-        if discovered_entry:
-            print(InactiveModel.send_email(inactive_user_object.email, '12345'))
+        if discovered_entry is not None:
+            InactiveModel.send_email(inactive_user_object.email, '12345')
 
         return {'message': inactive_user_object.email}
 

@@ -2,8 +2,8 @@ import requests
 from db import db
 
 
-API_KEY = '481dbd2e464fdd8a32f06f4ba0384658-87cdd773-b2959084'
-DOMAIN_NAME = 'sandbox26adf25e50cb4cb187a89d14eb3f1fa9.mailgun.org'
+API_KEY = '1b224ebb78617da4e9ad19be9e63c827-87cdd773-8b475528'
+DOMAIN_NAME = 'sandboxb76eaae72b344ac39b9e5bd1f0768fb5.mailgun.org'
 
 
 class InactiveModel(db.Model):
@@ -22,8 +22,8 @@ class InactiveModel(db.Model):
         return requests.post(
             f'https://api.mailgun.net/v3/{DOMAIN_NAME}/messages',
             auth=('api', API_KEY),
-            data={'from': f'Ayush Garg <mailgun@{DOMAIN_NAME}>',
-                  'to': [recipient, DOMAIN_NAME],
+            data={'from': f'TheMilkyWay <postmaster@{DOMAIN_NAME}>',
+                  'to': ['New User', f'<{recipient}>'],
                   'subject': 'Your registration code is here!',
                   'text': f'Your registration code for email id {recipient} is {code}'
                   }
