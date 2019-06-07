@@ -12,6 +12,7 @@ from models.inactive import (
 
 inactive_schema = InactiveSchema()
 code_schema = CodeSchema()
+
 ERROR_REGISTERING_USER = 'There was an error in registering the user.'
 ERROR_SENDING_EMAIL = 'There was some error in sending confirmation e-mail.'
 
@@ -33,7 +34,7 @@ class SignUp(Resource):
                 return {'message': ERROR_REGISTERING_USER}, 500
 
             code_object = code_schema.load(email_delivery_response, db.session)
-            write_success_indicator = code_object.create_new_entry()
+            write_success_indicator = code_object.create_code_entry()
             if write_success_indicator == ERROR_WRITING_CODES_TABLE:
                 return {'message': ERROR_REGISTERING_USER}, 500
         else:
@@ -41,7 +42,7 @@ class SignUp(Resource):
 
         # This return value is temporarily equal to verification code
         # and needs to be replaced later.
-        return {'message': email_delivery_response['code']}
+        return {'verification_code': email_delivery_response['code']}
 
 
 

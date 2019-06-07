@@ -5,6 +5,7 @@ from marshmallow import ValidationError
 from db import db
 from ma import ma
 from resources.signup import SignUp
+from resources.confirm import Confirm
 
 DB_URL = 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway'
 
@@ -17,6 +18,7 @@ api = Api(app)
 db.init_app(app)
 
 api.add_resource(SignUp, '/signup')
+api.add_resource(Confirm, '/confirm')
 
 
 @app.errorhandler(ValidationError)

@@ -1,5 +1,5 @@
 create table inactive(
-    name varchar(80) primary key not null,
-    email varchar(100) not null unique,
+    email varchar(100) primary key,
+    name varchar(80) not null,
     password varchar(100) not null unique
                      );
