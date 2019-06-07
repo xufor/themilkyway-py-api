@@ -4,10 +4,7 @@ from flask import request
 
 from schemas.codes import CodeSchema
 from models.codes import CodeModel
-from models.active import (
-    ActiveModel,
-    ERROR_WRITING_ACTIVE_TABLE
-)
+from models.active import ERROR_WRITING_ACTIVE_TABLE
 from models.inactive import InactiveModel
 from models.active import ActiveModel
 from schemas.active import ActiveSchema
