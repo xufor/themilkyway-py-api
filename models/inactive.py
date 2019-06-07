@@ -28,3 +28,6 @@ class InactiveModel(db.Model):
                   'text': f'Your registration code for email id {recipient} is {code}'
                   }
         )
+
+
+
