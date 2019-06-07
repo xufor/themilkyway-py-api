@@ -16,7 +16,6 @@ requests = "*"
 flask-jwt-extended = "*"
 flask-marshmallow = "*"
 psycopg2 = "*"
-sendgrid = "*"
 
 [requires]
 python_version = "3.7"
