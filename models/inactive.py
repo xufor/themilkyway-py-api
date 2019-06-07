@@ -1,33 +1,50 @@
-import requests
+import random
 from db import db
 
+from models.codes import CodeModel
 
-API_KEY = '1b224ebb78617da4e9ad19be9e63c827-87cdd773-8b475528'
-DOMAIN_NAME = 'sandboxb76eaae72b344ac39b9e5bd1f0768fb5.mailgun.org'
+ERROR_WRITING_INACTIVE_TABLE = 'Error writing inactive table.'
 
 
 class InactiveModel(db.Model):
     __tablename__ = 'inactive'
 
-    name = db.Column(db.String(80), nullable=False, primary_key=True)
-    email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False, unique=True)
+    name = db.Column(db.VARCHAR(80), nullable=False, primary_key=True)
+    email = db.Column(db.VARCHAR(100), nullable=False, unique=True)
+    password = db.Column(db.VARCHAR(100), nullable=False, unique=True)
+
+    # Please use this convention of saying query_email or any other parameter instead of
+    # only writing email.
+    @classmethod
+    def find_entry_by_email(cls, query_email):
+        return cls.query.filter_by(email=query_email).first()
 
     @classmethod
-    def find_entry_by_email(cls, email):
-        return cls.query.filter_by(email=email).first()
+    def send_email(cls, recipient):
+        verification_code = cls.generate_fresh_code()
+        print(verification_code)
+        response_code = 200
+        if response_code == 200:
+            return {'email': recipient, 'code': verification_code}
 
     @classmethod
-    def send_email(cls, recipient, code):
-        return requests.post(
-            f'https://api.mailgun.net/v3/{DOMAIN_NAME}/messages',
-            auth=('api', API_KEY),
-            data={'from': f'TheMilkyWay <postmaster@{DOMAIN_NAME}>',
-                  'to': ['New User', f'<{recipient}>'],
-                  'subject': 'Your registration code is here!',
-                  'text': f'Your registration code for email id {recipient} is {code}'
-                  }
-        )
+    def generate_random_code(cls):
+        return random.randint(999, 10000)
 
+    @classmethod
+    def generate_fresh_code(cls):
+        fresh_code = cls.generate_random_code()
+        while CodeModel.find_entry_by_code(fresh_code) is not None:
+            fresh_code = cls.generate_random_code()
+            if CodeModel.find_entry_by_code(fresh_code) is None:
+                return fresh_code
+        return fresh_code
+
+    def create_inactive_user(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except:
+            return ERROR_WRITING_INACTIVE_TABLE
 
 
