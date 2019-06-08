@@ -1,5 +1,6 @@
 import random
 from db import db
+from sqlalchemy.exc import SQLAlchemyError
 
 ERROR_WRITING_CODES_TABLE = 'Error writing codes table.'
 ERROR_DELETING_CODES_TABLE = 'Error deleting from codes table.'
@@ -37,13 +38,13 @@ class CodeModel(db.Model):
         try:
             db.session.add(self)
             db.session.commit()
-        except:
+        except SQLAlchemyError:
             return ERROR_WRITING_CODES_TABLE
 
     def delete_code_entry(self):
         try:
             db.session.delete(self)
             db.session.commit()
-        except:
+        except SQLAlchemyError:
             return ERROR_DELETING_CODES_TABLE
 

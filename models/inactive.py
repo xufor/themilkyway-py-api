@@ -1,4 +1,5 @@
 from db import db
+from sqlalchemy.exc import SQLAlchemyError
 
 from models.codes import CodeModel
 
@@ -30,12 +31,12 @@ class InactiveModel(db.Model):
         try:
             db.session.add(self)
             db.session.commit()
-        except:
+        except SQLAlchemyError:
             return ERROR_WRITING_INACTIVE_TABLE
 
     def delete_inactive_user(self):
         try:
             db.session.delete(self)
             db.session.commit()
-        except:
+        except SQLAlchemyError:
             return ERROR_DELETING_INACTIVE_TABLE
