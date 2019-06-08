@@ -10,7 +10,7 @@ class ActiveModel(db.Model):
 
     __tablename__ = 'active'
 
-    uid = db.Column(db.VARCHAR(6), default=True, primary_key=True)
+    uid = db.Column(db.VARCHAR(6), primary_key=True)
     name = db.Column(db.VARCHAR(80), nullable=False)
     email = db.Column(db.VARCHAR(100), nullable=False, unique=True)
     password = db.Column(db.VARCHAR(100), nullable=False)
