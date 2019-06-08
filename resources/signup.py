@@ -39,13 +39,13 @@ class SignUp(Resource):
             return {'message': INACTIVE_USER_FOUND}
 
         if email_delivery_response is not None:
-            write_success_indicator = inactive_user_object.create_inactive_user()
-            if write_success_indicator == ERROR_WRITING_INACTIVE_TABLE:
+            indicator = inactive_user_object.create_inactive_user()
+            if indicator == ERROR_WRITING_INACTIVE_TABLE:
                 return {'message': ERROR_REGISTERING_USER}, 500
 
             code_object = code_schema.load(email_delivery_response, db.session)
-            write_success_indicator = code_object.create_code_entry()
-            if write_success_indicator == ERROR_WRITING_CODES_TABLE:
+            indicator = code_object.create_code_entry()
+            if indicator == ERROR_WRITING_CODES_TABLE:
                 return {'message': ERROR_REGISTERING_USER}, 500
         else:
             return {'message': ERROR_SENDING_EMAIL}, 400

@@ -48,8 +48,8 @@ class Confirm(Resource):
                 inactive_user_data = inactive_schema.dump(discovered_inactive_user)
                 inactive_user_data['uid'] = ActiveModel.generate_fresh_uid()
                 active_user_object = active_schema.load(inactive_user_data, db.session)
-                write_success_indicator = active_user_object.create_active_user()
-                if write_success_indicator == ERROR_WRITING_ACTIVE_TABLE:
+                indicator = active_user_object.create_active_user()
+                if indicator == ERROR_WRITING_ACTIVE_TABLE:
                     return {'message': CONFIRMATION_FAILED}, 500
                 else:
                     return {'message': CONFIRMATION_SUCCESSFUL}, 200
