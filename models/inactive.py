@@ -12,7 +12,7 @@ class InactiveModel(db.Model):
 
     email = db.Column(db.VARCHAR(100), primary_key=True)
     name = db.Column(db.VARCHAR(80), nullable=False)
-    password = db.Column(db.VARCHAR(100), nullable=False, unique=True)
+    password = db.Column(db.VARCHAR(100), nullable=False)
 
     # Please use this convention of saying query_email or any other parameter instead of
     # only writing email.
