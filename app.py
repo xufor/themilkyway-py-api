@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify
 from flask_restful import Api
 from marshmallow import ValidationError
@@ -7,10 +8,8 @@ from ma import ma
 from resources.signup import SignUp
 from resources.confirm import Confirm
 
-DB_URL = 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway'
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
