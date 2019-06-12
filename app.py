@@ -17,8 +17,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
-jwt = JWTManager(app)
 
+jwt = JWTManager(app)
+app.secret_key = 'jose'
 api = Api(app)
 db.init_app(app)
 

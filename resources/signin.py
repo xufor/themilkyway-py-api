@@ -1,6 +1,5 @@
 from flask_restful import Resource
-from db import db
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 import bcrypt
 from flask import request
 
@@ -17,15 +16,22 @@ class SignIn(Resource):
     @classmethod
     def post(cls):
         incoming_data = request.get_json()
-        signin_user_object = signin_schema.load(incoming_data, db.session)
-
-        if ActiveModel.find_entry_by_email(signin_user_object.email) is None:
+        incoming_email = incoming_data['email']
+        incoming_password = incoming_data['password']
+        if ActiveModel.find_entry_by_email(incoming_email) is None:
             return {'message': 'SignUp first or invalid email'}
-        elif ActiveModel.find_entry_by_email(signin_user_object.email) is not None:
-            database_password = ActiveModel.find_entry_by_email(signin_user_object.email).password.encode()
-            encoded_password = signin_user_object.password.encode()
-            check_password = bcrypt.checkpw(encoded_password, database_password)
-            if check_password == True:
-                return {'message': 'successfully login'}
+        elif ActiveModel.find_entry_by_email(incoming_email) is not None:
+            signup_password = ActiveModel.find_entry_by_email(incoming_email).password.encode()
+            encoded_password = incoming_password.encode()
+            check_password = bcrypt.checkpw(encoded_password, signup_password)
+            if check_password:
+                _id = get_jwt_identity()
+                access_token = create_access_token(identity=_id, fresh=True)
+                refresh_token = create_refresh_token(identity=_id)
+
+                return {'message': 'successfully login',
+                        'access token': access_token,
+                        'refresh token': refresh_token
+                        }, 200
             else:
                 return {'message': 'check password'}
