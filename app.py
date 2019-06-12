@@ -6,6 +6,7 @@ from db import db
 from ma import ma
 from resources.signup import SignUp
 from resources.confirm import Confirm
+from resources.signin import SignIn
 
 DB_URL = 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway'
 
@@ -19,6 +20,7 @@ db.init_app(app)
 
 api.add_resource(SignUp, '/signup')
 api.add_resource(Confirm, '/confirm')
+api.add_resource(SignIn, '/signin')
 
 
 @app.errorhandler(ValidationError)
