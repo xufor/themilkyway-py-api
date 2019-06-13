@@ -13,7 +13,7 @@ class ActiveModel(db.Model):
     uid = db.Column(db.VARCHAR(6), primary_key=True)
     name = db.Column(db.VARCHAR(80), nullable=False)
     email = db.Column(db.VARCHAR(100), nullable=False, unique=True)
-    password = db.Column(db.VARCHAR(100), nullable=False)
+    password = db.Column(db.VARCHAR(60), nullable=False)
 
     @classmethod
     def find_entry_by_email(cls, query_email):
