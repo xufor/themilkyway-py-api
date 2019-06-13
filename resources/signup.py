@@ -24,13 +24,8 @@ class SignUp(Resource):
     @classmethod
     def post(cls):
         incoming_data = request.get_json()
-        if len(incoming_data['password']) > 72:
-            return {'message': INVALID_PASSWORD_LENGTH}
-
-        encoded_password = incoming_data['password'].encode()
-        hashed_password = bcrypt.hashpw(encoded_password, bcrypt.gensalt())
-        incoming_data['password'] = hashed_password.decode()
         inactive_user_object = inactive_schema.load(incoming_data, db.session)
+
         discovered_entry = InactiveModel.find_entry_by_email(inactive_user_object.email)
 
         if discovered_entry is None:
@@ -39,14 +34,33 @@ class SignUp(Resource):
             return {'message': INACTIVE_USER_FOUND}
 
         if email_delivery_response is not None:
+            # Checking password length and hashing it
+            if len(inactive_user_object.password) > 72:
+                return {'message': INVALID_PASSWORD_LENGTH}
+
+            encoded_password = inactive_user_object.password.encode()
+            hashed_password = bcrypt.hashpw(encoded_password, bcrypt.gensalt())
+            inactive_user_object.password = hashed_password.decode()
+            # Checking password length and hashing it
+
+            # Creating inactive user and checking if the operation was
+            # successful or not.
             indicator = inactive_user_object.create_inactive_user()
             if indicator == ERROR_WRITING_INACTIVE_TABLE:
                 return {'message': ERROR_REGISTERING_USER}, 500
+            # Creating inactive user and checking if the operation was
+            # successful or not.
 
+            # Creating code entry and checking if the operation was
+            # successful or not.
             code_object = code_schema.load(email_delivery_response, db.session)
             indicator = code_object.create_code_entry()
             if indicator == ERROR_WRITING_CODES_TABLE:
+                # If writing code table fails then remove the inactive user too
+                inactive_user_object.delete_inactive_user()
                 return {'message': ERROR_REGISTERING_USER}, 500
+            # Creating code entry and checking if the operation was
+            # successful or not.
         else:
             return {'message': ERROR_SENDING_EMAIL}, 400
 
