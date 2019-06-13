@@ -39,6 +39,7 @@ class CodeModel(db.Model):
             db.session.add(self)
             db.session.commit()
         except SQLAlchemyError:
+            db.session.rollback()
             return ERROR_WRITING_CODES_TABLE
 
     def delete_code_entry(self):
@@ -46,5 +47,6 @@ class CodeModel(db.Model):
             db.session.delete(self)
             db.session.commit()
         except SQLAlchemyError:
+            db.session.rollback()
             return ERROR_DELETING_CODES_TABLE
 

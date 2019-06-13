@@ -32,6 +32,7 @@ class InactiveModel(db.Model):
             db.session.add(self)
             db.session.commit()
         except SQLAlchemyError:
+            db.session.rollback()
             return ERROR_WRITING_INACTIVE_TABLE
 
     def delete_inactive_user(self):
@@ -39,4 +40,5 @@ class InactiveModel(db.Model):
             db.session.delete(self)
             db.session.commit()
         except SQLAlchemyError:
+            db.session.rollback()
             return ERROR_DELETING_INACTIVE_TABLE

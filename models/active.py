@@ -41,6 +41,7 @@ class ActiveModel(db.Model):
             db.session.add(self)
             db.session.commit()
         except SQLAlchemyError:
+            db.session.rollback()
             return ERROR_WRITING_ACTIVE_TABLE
 
 
