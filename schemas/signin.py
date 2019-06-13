@@ -1,7 +1,6 @@
-from ma import ma
-from models.signin import SignInModel
+from marshmallow import Schema, fields
 
 
-class SignInSchema(ma.ModelSchema):
-    class Meta:
-        model = SignInModel
+class SigninSchema(Schema):
+    email = fields.Email(required=True, validate=lambda e: 1 <= len(e) <= 80)
+    password = fields.String(required=True, validate=lambda e: 1 <= len(e) <= 72)
