@@ -19,7 +19,15 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 
 jwt = JWTManager(app)
-app.secret_key = 'u83bdd537e9'
+
+app.secret_key = 'u83bdd537e9g0yt7yvc8cm5ex9c8n9v2a'
+
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
+
 api = Api(app)
 db.init_app(app)
 
