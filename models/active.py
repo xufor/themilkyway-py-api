@@ -14,6 +14,7 @@ class ActiveModel(db.Model):
     name = db.Column(db.VARCHAR(80), nullable=False)
     email = db.Column(db.VARCHAR(100), nullable=False, unique=True)
     password = db.Column(db.VARCHAR(60), nullable=False)
+    time = db.Column(db.TIMESTAMP, nullable=False)
 
     @classmethod
     def find_entry_by_email(cls, query_email):

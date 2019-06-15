@@ -1,3 +1,4 @@
+import time
 from db import db
 from flask_restful import Resource
 from flask import (
@@ -24,8 +25,8 @@ confirm_schema = ConfirmSchema()
 
 INVALID_LINK = 'The provided link is invalid.'
 CONFIRMATION_FAILED = 'User confirmation failed.'
-SERVER_ERROR = 'Internal server error occurred.'
 CONFIRMATION_SUCCESSFUL = 'User successfully confirmed.'
+SERVER_ERROR = 'Internal server error.'
 
 
 class Confirm(Resource):
@@ -44,10 +45,20 @@ class Confirm(Resource):
             if indicator == ERROR_DELETING_INACTIVE_TABLE:
                 return make_response(render_template('conf_page.html', message=SERVER_ERROR), 500, headers)
 
+            # Dumping the fetched inactive object into a inactive data dictionary
             inactive_user_data = inactive_schema.dump(discovered_inactive_user)
-            inactive_user_data['uid'] = ActiveModel.generate_fresh_uid()
+
+            # Removing the code field from inactive data
             inactive_user_data.pop('code')
+
+            # Creating an active schema object using available inactive data
             active_user_object = active_schema.load(inactive_user_data, db.session)
+
+            # Adding the time field using the inbuilt time module
+            active_user_object.time = time.asctime(time.localtime(time.time()))
+
+            # Adding the uid field using inbuilt uuid module
+            active_user_object.uid = ActiveModel.generate_fresh_uid()
 
             indicator = active_user_object.create_active_user()
             if indicator == ERROR_WRITING_ACTIVE_TABLE:

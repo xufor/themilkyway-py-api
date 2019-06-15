@@ -1,3 +1,4 @@
+import time
 import bcrypt
 from db import db
 from flask_restful import Resource
@@ -46,11 +47,17 @@ class SignUp(Resource):
             # Adding a code field after generating a fresh code
             inactive_user_object.code = email_delivery_response['code']
 
+            # Adding the time field using the inbuilt python module
+            inactive_user_object.time = time.asctime(time.localtime(time.time()))
+
             # Creating inactive user and checking if the operation was
             # successful or not.
             indicator = inactive_user_object.create_inactive_user()
             if indicator == ERROR_WRITING_INACTIVE_TABLE:
-                return {'message': ERROR_REGISTERING_USER}, 500
+                return {
+                           'message': ERROR_REGISTERING_USER,
+                           'details': ERROR_WRITING_INACTIVE_TABLE
+                       }, 500
         else:
             return {'message': ERROR_SENDING_EMAIL}, 400
 

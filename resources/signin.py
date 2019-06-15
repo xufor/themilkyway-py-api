@@ -42,10 +42,11 @@ class SignIn(Resource):
                 refresh_token = create_refresh_token(identity=discovered_active_user.uid)
                 # If equal send access token and refresh token generated
                 # using the uid.
-                return {'message': SIGNED_IN_SUCCESSFULLY,
-                        'access_token': access_token,
-                        'refresh_token': refresh_token
-                        }, 202
+                return {
+                           'message': SIGNED_IN_SUCCESSFULLY,
+                           'access_token': access_token,
+                           'refresh_token': refresh_token
+                       }, 202
             # If password is not equal the return an error string
             else:
                 return {'message': INCORRECT_PASSWORD}, 400
