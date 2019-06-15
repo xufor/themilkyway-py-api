@@ -43,8 +43,8 @@ class SignIn(Resource):
                 # If equal send access token and refresh token generated
                 # using the uid.
                 return {'message': SIGNED_IN_SUCCESSFULLY,
-                        'access token': access_token,
-                        'refresh token': refresh_token
+                        'access_token': access_token,
+                        'refresh_token': refresh_token
                         }, 202
             # If password is not equal the return an error string
             else:
