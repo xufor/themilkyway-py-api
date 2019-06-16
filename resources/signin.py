@@ -8,10 +8,10 @@ from flask_jwt_extended import (
 
 from models.active import ActiveModel
 from schemas.inactive import InactiveSchema
-from schemas.signin import SigninSchema
+from schemas.signin import SignInSchema
 
 inactive_schema = InactiveSchema()
-signin_schema = SigninSchema()
+signin_schema = SignInSchema()
 
 USER_NOT_REGISTERED = 'Please create an account first.'
 SIGNED_IN_SUCCESSFULLY = 'Signed in successfully.'
@@ -21,10 +21,9 @@ INCORRECT_PASSWORD = 'The provided password is incorrect.'
 class SignIn(Resource):
     @classmethod
     def post(cls):
-        incoming_data = request.get_json()
         # The signin_schema is made using vanilla marshmallow and not
         # flask marshmallow.
-        parsed_data = signin_schema.load(incoming_data)
+        parsed_data = signin_schema.load(request.get_json())
         incoming_email = parsed_data['email']
         incoming_password = parsed_data['password']
         # After parsing the data fetch an active user with received email
@@ -42,10 +41,11 @@ class SignIn(Resource):
                 refresh_token = create_refresh_token(identity=discovered_active_user.uid)
                 # If equal send access token and refresh token generated
                 # using the uid.
-                return {'message': SIGNED_IN_SUCCESSFULLY,
-                        'access token': access_token,
-                        'refresh token': refresh_token
-                        }, 202
+                return {
+                           'message': SIGNED_IN_SUCCESSFULLY,
+                           'access_token': access_token,
+                           'refresh_token': refresh_token
+                       }, 202
             # If password is not equal the return an error string
             else:
                 return {'message': INCORRECT_PASSWORD}, 400

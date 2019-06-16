@@ -5,4 +5,4 @@ from models.inactive import InactiveModel
 class InactiveSchema(ma.ModelSchema):
     class Meta:
         model = InactiveModel
-        dump_only = ('code',)
+        dump_only = ('code', 'time')
