@@ -1,6 +1,8 @@
 import uuid
-from db import db
 from sqlalchemy.exc import SQLAlchemyError
+
+from db import db
+from models.stories import StoryModel # Needed for establishing a relationship
 
 
 ERROR_WRITING_ACTIVE_TABLE = 'Error writing active table.'
@@ -11,10 +13,11 @@ class ActiveModel(db.Model):
     __tablename__ = 'active'
 
     uid = db.Column(db.VARCHAR(6), primary_key=True)
+    time = db.Column(db.TIMESTAMP, nullable=False)
     name = db.Column(db.VARCHAR(80), nullable=False)
     email = db.Column(db.VARCHAR(100), nullable=False, unique=True)
     password = db.Column(db.VARCHAR(60), nullable=False)
-    time = db.Column(db.TIMESTAMP, nullable=False)
+    stories = db.relationship('StoryModel', backref='active')
 
     @classmethod
     def find_entry_by_email(cls, query_email):
@@ -33,8 +36,6 @@ class ActiveModel(db.Model):
         fresh_uid = cls.generate_random_uid()
         while cls.find_entry_by_uid(fresh_uid) is not None:
             fresh_uid = cls.generate_random_code()
-            if cls.find_entry_by_uid(fresh_uid) is None:
-                return fresh_uid
         return fresh_uid
 
     def create_active_user(self):

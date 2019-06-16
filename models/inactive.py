@@ -1,6 +1,7 @@
 import uuid
-from db import db
 from sqlalchemy.exc import SQLAlchemyError
+
+from db import db
 
 ERROR_WRITING_INACTIVE_TABLE = 'Error writing inactive table.'
 ERROR_DELETING_INACTIVE_TABLE = 'Error deleting from inactive table.'
@@ -10,10 +11,10 @@ class InactiveModel(db.Model):
     __tablename__ = 'inactive'
 
     email = db.Column(db.VARCHAR(100), primary_key=True)
+    time = db.Column(db.TIMESTAMP, nullable=False)
     name = db.Column(db.VARCHAR(80), nullable=False)
     password = db.Column(db.VARCHAR(60), nullable=False)
     code = db.Column(db.VARCHAR(32), nullable=False, unique=True)
-    time = db.Column(db.TIMESTAMP, nullable=False)
 
     # Please use this convention of saying query_email or any other parameter instead of
     # only writing email.
@@ -37,8 +38,6 @@ class InactiveModel(db.Model):
         fresh_code = cls.generate_random_code()
         while cls.find_entry_by_code(fresh_code) is not None:
             fresh_code = cls.generate_random_code()
-            if cls.find_entry_by_code(fresh_code) is None:
-                return fresh_code
         return fresh_code
 
     @classmethod
