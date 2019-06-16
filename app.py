@@ -3,11 +3,17 @@ from flask_restful import Api
 from marshmallow import ValidationError
 from flask_jwt_extended import JWTManager
 
-from db import db
 from ma import ma
 from resources.signup import SignUp
 from resources.confirm import Confirm
 from resources.signin import SignIn
+from resources.submit import Submit
+from resources.approve import Approve
+from resources.reject import Reject
+from resources.admin import Admin
+from admin import (
+    ADMIN_UID
+)
 
 
 DB_URL = 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway'
@@ -16,6 +22,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
+api = Api(app)
 
 
 jwt = JWTManager(app)
@@ -28,19 +35,29 @@ def create_tables():
     db.create_all()
 
 
-api = Api(app)
-db.init_app(app)
-
-api.add_resource(SignUp, '/signup')
-api.add_resource(SignIn, '/signin')
-api.add_resource(Confirm, '/confirm/<string:code>')
-
-
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(err):
     return jsonify(err.messages), 400
 
 
+@jwt.user_claims_loader
+def add_claims_to_jwt(identity):
+    if identity == ADMIN_UID:
+        return {'is_admin': True}
+    return {'is_admin': False}
+
+
+api.add_resource(SignUp, '/signup')
+api.add_resource(SignIn, '/signin')
+api.add_resource(Confirm, '/confirm/<string:code>')
+api.add_resource(Submit, '/submit')
+api.add_resource(Approve, '/approve')
+api.add_resource(Reject, '/reject')
+api.add_resource(Admin, '/admin')
+
+
 if __name__ == '__main__':
+    from db import db
+    db.init_app(app)
     ma.init_app(app)
     app.run(port=5000, debug=True)

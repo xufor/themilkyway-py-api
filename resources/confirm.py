@@ -32,8 +32,8 @@ SERVER_ERROR = 'Internal server error.'
 class Confirm(Resource):
     @classmethod
     def get(cls, code):
-        incoming_data = {'code': code}
-        confirm_data = confirm_schema.load(incoming_data)
+
+        confirm_data = confirm_schema.load({'code': code})
 
         headers = {'Content-Type': 'text/html'}
 
@@ -47,21 +47,16 @@ class Confirm(Resource):
 
             # Dumping the fetched inactive object into a inactive data dictionary
             inactive_user_data = inactive_schema.dump(discovered_inactive_user)
-
             # Removing the code field from inactive data
             inactive_user_data.pop('code')
-
             # Creating an active schema object using available inactive data
             active_user_object = active_schema.load(inactive_user_data, db.session)
-
             # Adding the time field using the inbuilt time module
             active_user_object.time = time.asctime(time.localtime(time.time()))
-
             # Adding the uid field using inbuilt uuid module
             active_user_object.uid = ActiveModel.generate_fresh_uid()
 
-            indicator = active_user_object.create_active_user()
-            if indicator == ERROR_WRITING_ACTIVE_TABLE:
+            if active_user_object.create_active_user() == ERROR_WRITING_ACTIVE_TABLE:
                 discovered_inactive_user.create_inactive_user()
                 return make_response(render_template('conf_page.html', message=SERVER_ERROR), 500, headers)
             else:

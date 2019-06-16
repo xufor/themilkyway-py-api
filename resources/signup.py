@@ -23,8 +23,7 @@ INVALID_PASSWORD_LENGTH = 'The length of password cannot be greater than 72 char
 class SignUp(Resource):
     @classmethod
     def post(cls):
-        incoming_data = request.get_json()
-        inactive_user_object = inactive_schema.load(incoming_data, db.session)
+        inactive_user_object = inactive_schema.load(request.get_json(), db.session)
 
         if ActiveModel.find_entry_by_email(inactive_user_object.email) is not None:
             return {'message': ACTIVE_USER_FOUND}
@@ -52,8 +51,7 @@ class SignUp(Resource):
 
             # Creating inactive user and checking if the operation was
             # successful or not.
-            indicator = inactive_user_object.create_inactive_user()
-            if indicator == ERROR_WRITING_INACTIVE_TABLE:
+            if inactive_user_object.create_inactive_user() == ERROR_WRITING_INACTIVE_TABLE:
                 return {
                            'message': ERROR_REGISTERING_USER,
                            'details': ERROR_WRITING_INACTIVE_TABLE

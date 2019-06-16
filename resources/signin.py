@@ -8,10 +8,10 @@ from flask_jwt_extended import (
 
 from models.active import ActiveModel
 from schemas.inactive import InactiveSchema
-from schemas.signin import SigninSchema
+from schemas.signin import SignInSchema
 
 inactive_schema = InactiveSchema()
-signin_schema = SigninSchema()
+signin_schema = SignInSchema()
 
 USER_NOT_REGISTERED = 'Please create an account first.'
 SIGNED_IN_SUCCESSFULLY = 'Signed in successfully.'
@@ -21,10 +21,9 @@ INCORRECT_PASSWORD = 'The provided password is incorrect.'
 class SignIn(Resource):
     @classmethod
     def post(cls):
-        incoming_data = request.get_json()
         # The signin_schema is made using vanilla marshmallow and not
         # flask marshmallow.
-        parsed_data = signin_schema.load(incoming_data)
+        parsed_data = signin_schema.load(request.get_json())
         incoming_email = parsed_data['email']
         incoming_password = parsed_data['password']
         # After parsing the data fetch an active user with received email
