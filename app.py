@@ -13,6 +13,7 @@ from resources.submit import Submit
 from resources.approve import Approve
 from resources.reject import Reject
 from resources.admin import Admin
+from resources.refresh import Refresh
 from models.blacklist import BlacklistModel
 from admin import (
     ADMIN_UID
@@ -78,6 +79,7 @@ api.add_resource(Submit, '/submit')
 api.add_resource(Approve, '/approve')
 api.add_resource(Reject, '/reject')
 api.add_resource(Admin, '/admin')
+api.add_resource(Refresh, '/refresh')
 
 if __name__ == '__main__':
     ma.init_app(app)

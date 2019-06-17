@@ -1,4 +1,3 @@
-from flask_restful import Resource
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
