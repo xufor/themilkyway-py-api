@@ -58,8 +58,8 @@ def when_token_is_revoked():
 
 
 @jwt.invalid_token_loader
-def when_token_is_invalid():
-    return jsonify({'message': TOKEN_INVALID})
+def when_token_is_invalid(reason):
+    return jsonify({'message': TOKEN_INVALID, 'reason': reason})
 
 
 @jwt.user_claims_loader
