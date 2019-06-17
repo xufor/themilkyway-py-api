@@ -44,7 +44,7 @@ class Submit(Resource):
         return {
             'message': STORY_SUCCESSFULLY_SUBMITTED,
             'sid': story_object.sid
-        }
+        }, 201
 
 
 
