@@ -3,7 +3,7 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import (
     jwt_required,
-    get_jwt_identity
+    get_jwt_identity,
 )
 
 from db import db
@@ -21,9 +21,8 @@ STORY_SUCCESSFULLY_SUBMITTED = 'Story successfully submitted.'
 
 class Submit(Resource):
     # This method only requires story and summary as json
-    @classmethod
     @jwt_required
-    def post(cls):
+    def post(self):
         # Loaded incoming data into story
         story_object = story_schema.load(request.get_json(), db.session)
         # Adding time, uid and sid fields to story object

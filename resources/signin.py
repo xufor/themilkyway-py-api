@@ -3,7 +3,9 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import (
     create_access_token,
-    create_refresh_token
+    create_refresh_token,
+    get_jti,
+    decode_token
 )
 
 from models.active import ActiveModel
@@ -44,7 +46,7 @@ class SignIn(Resource):
                 return {
                            'message': SIGNED_IN_SUCCESSFULLY,
                            'access_token': access_token,
-                           'refresh_token': refresh_token
+                           'refresh_token': refresh_token,
                        }, 202
             # If password is not equal the return an error string
             else:
