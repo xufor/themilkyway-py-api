@@ -1,4 +1,7 @@
-from flask import Flask, jsonify
+from flask import (
+    Flask,
+    jsonify
+)
 from flask_restful import Api
 from marshmallow import ValidationError
 from flask_jwt_extended import JWTManager
@@ -21,10 +24,12 @@ from admin import (
 
 TOKEN_REVOKED = 'The token has been revoked. Please login again.'
 TOKEN_EXPIRED = 'The token has expired. Please refresh it.'
+TOKEN_INVALID = 'The token is invalid.'
 
 DB_URL = 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway'
 
 app = Flask(__name__)
+app.secret_key = 'u83bdd537e9g0yt7yvc8cm5ex9c8n9v2a'
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -32,16 +37,36 @@ app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 api = Api(app)
 
-db.init_app(app)
-
 jwt = JWTManager(app)
 
-app.secret_key = 'u83bdd537e9g0yt7yvc8cm5ex9c8n9v2a'
+db.init_app(app)
 
 
 @app.before_first_request
 def create_tables():
     db.create_all()
+
+
+@jwt.revoked_token_loader
+def when_token_is_revoked():
+    return jsonify({'message': TOKEN_REVOKED})
+
+
+@jwt.expired_token_loader
+def when_token_is_revoked():
+    return jsonify({'message': TOKEN_EXPIRED})
+
+
+@jwt.invalid_token_loader
+def when_token_is_invalid():
+    return jsonify({'message': TOKEN_INVALID})
+
+
+@jwt.user_claims_loader
+def add_claims_to_jwt(identity):
+    if identity == ADMIN_UID:
+        return {'is_admin': True}
+    return {'is_admin': False}
 
 
 @app.errorhandler(ValidationError)
@@ -51,24 +76,8 @@ def handle_marshmallow_validation(err):
 
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
+    print(BlacklistModel.check_jti_in_blacklist(decrypted_token['jti']))
     return BlacklistModel.check_jti_in_blacklist(decrypted_token['jti'])
-
-
-@jwt.revoked_token_loader
-def when_token_is_revoked():
-    return {'message': TOKEN_REVOKED}
-
-
-@jwt.expired_token_loader
-def when_token_is_revoked():
-    return {'message': TOKEN_EXPIRED}
-
-
-@jwt.user_claims_loader
-def add_claims_to_jwt(identity):
-    if identity == ADMIN_UID:
-        return {'is_admin': True}
-    return {'is_admin': False}
 
 
 api.add_resource(SignUp, '/signup')

@@ -37,7 +37,7 @@ class StoryModel(db.Model):
     def generate_fresh_sid(cls):
         fresh_sid = cls.generate_random_sid()
         while cls.find_entry_by_sid(fresh_sid) is not None:
-            fresh_sid = cls.generate_random_code()
+            fresh_sid = cls.generate_random_sid()
         return fresh_sid
 
     def create_story(self):

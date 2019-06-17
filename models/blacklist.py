@@ -14,7 +14,7 @@ class BlacklistModel(db.Model):
 
     @classmethod
     def check_jti_in_blacklist(cls, query_jti):
-        if cls.query.filter_by(jti=query_jti).first():
+        if cls.query.filter_by(jti=query_jti).first() is not None:
             return True
         else:
             return False
