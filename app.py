@@ -15,12 +15,11 @@ from resources.signout import SignOut
 from resources.submit import Submit
 from resources.approve import Approve
 from resources.reject import Reject
-from resources.admin import Admin
+from resources.dummy import Dummy
 from resources.refresh import Refresh
+from resources.drop import Drop
 from models.blacklist import BlacklistModel
-from admin import (
-    ADMIN_UID
-)
+from dummy import UID
 
 TOKEN_REVOKED = 'The token has been revoked. Please login again.'
 TOKEN_EXPIRED = 'The token has expired. Please refresh it.'
@@ -29,12 +28,14 @@ TOKEN_INVALID = 'The token is invalid.'
 DB_URL = 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway'
 
 app = Flask(__name__)
-app.secret_key = 'u83bdd537e9g0yt7yvc8cm5ex9c8n9v2a'
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
+
+app.secret_key = 'u83bdd537e9g0yt7yvc8cm5ex9c8n9v2a'
+
 api = Api(app)
 
 jwt = JWTManager(app)
@@ -64,7 +65,7 @@ def when_token_is_invalid(reason):
 
 @jwt.user_claims_loader
 def add_claims_to_jwt(identity):
-    if identity == ADMIN_UID:
+    if identity == UID[0]:
         return {'is_admin': True}
     return {'is_admin': False}
 
@@ -86,8 +87,9 @@ api.add_resource(Confirm, '/confirm/<string:code>')
 api.add_resource(Submit, '/submit')
 api.add_resource(Approve, '/approve')
 api.add_resource(Reject, '/reject')
-api.add_resource(Admin, '/admin')
+api.add_resource(Dummy, '/dummy')
 api.add_resource(Refresh, '/refresh')
+api.add_resource(Drop, '/drop')
 
 if __name__ == '__main__':
     ma.init_app(app)

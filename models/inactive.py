@@ -14,7 +14,7 @@ class InactiveModel(db.Model):
     time = db.Column(db.TIMESTAMP, nullable=False)
     name = db.Column(db.VARCHAR(80), nullable=False)
     password = db.Column(db.VARCHAR(60), nullable=False)
-    code = db.Column(db.VARCHAR(32), nullable=False, unique=True)
+    code = db.Column(db.VARCHAR(64), nullable=False, unique=True)
 
     # Please use this convention of saying query_email or any other parameter instead of
     # only writing email.
@@ -31,7 +31,7 @@ class InactiveModel(db.Model):
 
     @classmethod
     def generate_random_code(cls):
-        return uuid.uuid4().hex.lower()
+        return uuid.uuid4().hex.lower() + uuid.uuid4().hex.lower()
 
     @classmethod
     def generate_fresh_code(cls):
