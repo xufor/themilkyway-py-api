@@ -18,6 +18,7 @@ from resources.reject import Reject
 from resources.dummy import Dummy
 from resources.refresh import Refresh
 from resources.drop import Drop
+from resources.test import Test
 from models.blacklist import BlacklistModel
 from dummy import UID
 
@@ -90,6 +91,7 @@ api.add_resource(Reject, '/reject')
 api.add_resource(Dummy, '/dummy')
 api.add_resource(Refresh, '/refresh')
 api.add_resource(Drop, '/drop')
+api.add_resource(Test, '/test')
 
 if __name__ == '__main__':
     ma.init_app(app)
