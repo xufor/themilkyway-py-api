@@ -3,6 +3,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
 from models.stories import StoryModel # Needed for establishing a relationship
+from models.follow import FollowModel # Needed for establishing a relationship
 
 
 ERROR_WRITING_ACTIVE_TABLE = 'Error writing active table.'
@@ -17,7 +18,8 @@ class ActiveModel(db.Model):
     name = db.Column(db.VARCHAR(80), nullable=False)
     email = db.Column(db.VARCHAR(100), nullable=False, unique=True)
     password = db.Column(db.VARCHAR(60), nullable=False)
-    stories = db.relationship('StoryModel', backref='active')
+    submissions = db.relationship('StoryModel', backref='active')
+    following = db.relationship('FollowModel', backref='active')
 
     @classmethod
     def find_entry_by_email(cls, query_email):
@@ -46,4 +48,9 @@ class ActiveModel(db.Model):
             db.session.rollback()
             return ERROR_WRITING_ACTIVE_TABLE
 
-
+    def delete_active_user(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except SQLAlchemyError:
+            db.session.rollback()

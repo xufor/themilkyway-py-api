@@ -5,5 +5,6 @@ from models.active import ActiveModel
 class Test(Resource):
     @classmethod
     def get(cls):
-        x = ActiveModel.query.filter_by(uid='7ui87h').first()
-        return {'result': x.stories[0].story}
+        x = ActiveModel.query.filter_by(uid='6be2a5').first()
+        print(x.submissions)
+        return {'result': 'done'}
