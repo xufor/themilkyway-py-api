@@ -2,6 +2,7 @@ import uuid
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
+from models.like import LikeModel  # Do not delete
 
 ERROR_WRITING_STORY_TABLE = 'Error writing story table.'
 ERROR_DELETING_STORY_TABLE = 'Error deleting from story table.'
@@ -20,6 +21,8 @@ class StoryModel(db.Model):
     story = db.Column(db.TEXT, nullable=False)
     reads = db.Column(db.BIGINT, nullable=False)
     likes = db.Column(db.BIGINT, nullable=False)
+    fans = db.relationship('LikeModel', foreign_keys='LikeModel.target',
+                           backref='favourite', lazy='dynamic')
 
     @classmethod
     def find_entry_by_sid(cls, query_sid):
@@ -39,6 +42,10 @@ class StoryModel(db.Model):
         while cls.find_entry_by_sid(fresh_sid) is not None:
             fresh_sid = cls.generate_random_sid()
         return fresh_sid
+
+    @classmethod
+    def find_story_by_sid(cls, query_sid):
+        return cls.query.filter_by(sid=query_sid).first()
 
     def create_story(self):
         try:

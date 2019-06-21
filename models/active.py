@@ -2,8 +2,9 @@ import uuid
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
-from models.stories import StoryModel # Needed for establishing a relationship
-from models.follow import FollowModel # Needed for establishing a relationship
+from models.stories import StoryModel  # Do not remove
+from models.follow import FollowModel  # Do not remove
+from models.like import LikeModel      # Do not remove
 
 
 ERROR_WRITING_ACTIVE_TABLE = 'Error writing active table.'
@@ -18,8 +19,13 @@ class ActiveModel(db.Model):
     name = db.Column(db.VARCHAR(80), nullable=False)
     email = db.Column(db.VARCHAR(100), nullable=False, unique=True)
     password = db.Column(db.VARCHAR(60), nullable=False)
-    submissions = db.relationship('StoryModel', backref='active')
-    following = db.relationship('FollowModel', backref='active')
+    submissions = db.relationship('StoryModel', backref='author', lazy='dynamic')
+    following = db.relationship('FollowModel', foreign_keys='FollowModel.source',
+                                backref='followers', lazy='dynamic')
+    followers = db.relationship('FollowModel', foreign_keys='FollowModel.target',
+                                backref='following', lazy='dynamic')
+    favourites = db.relationship('LikeModel', foreign_keys='LikeModel.source',
+                                 backref='fan', lazy='dynamic')
 
     @classmethod
     def find_entry_by_email(cls, query_email):

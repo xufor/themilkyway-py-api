@@ -3928,6 +3928,12 @@ TITLES = ['A Close Encounter of a Different Kind', 'The Fox and the crow', 'The 
           'LionBirds', 'I have no idea where this came from or where it\'s going', 'The Little Mermaid']
 
 
+def status(i):
+    if i%2==0:
+         return 'unapproved'
+    else:
+        return 'approved'
+
 def create_dummy_data():
     conn = psycopg2.connect(dbname='themilkyway', user='postgres', password='1999')
     cur = conn.cursor()

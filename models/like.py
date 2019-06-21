@@ -1,17 +1,17 @@
 from db import db
 from sqlalchemy.exc import SQLAlchemyError
 
-ERROR_WRITING_FOLLOW_TABLE = 'Error writing follow table.'
-ERROR_DELETING_FOLLOW_TABLE = 'Error deleting from follow table.'
+ERROR_WRITING_LIKE_TABLE = 'Error writing likes table.'
+ERROR_DELETING_LIKE_TABLE = 'Error deleting from likes table.'
 
 
-class FollowModel(db.Model):
+class LikeModel(db.Model):
 
-    __tablename__ = 'follow'
+    __tablename__ = 'like'
 
     sno = db.Column(db.INTEGER, autoincrement=True, primary_key=True)
     source = db.Column(db.VARCHAR(6), db.ForeignKey('active.uid'), nullable=False)
-    target = db.Column(db.VARCHAR(6), db.ForeignKey('active.uid'), nullable=False)
+    target = db.Column(db.VARCHAR(8), db.ForeignKey('stories.sid'), nullable=False)
     time = db.Column(db.TIMESTAMP, nullable=False)
 
     def create_entry(self):
@@ -20,7 +20,7 @@ class FollowModel(db.Model):
             db.session.commit()
         except SQLAlchemyError:
             db.session.rollback()
-            return ERROR_WRITING_FOLLOW_TABLE
+            return ERROR_WRITING_LIKE_TABLE
 
     def delete_entry(self):
         try:
@@ -28,6 +28,6 @@ class FollowModel(db.Model):
             db.session.commit()
         except SQLAlchemyError:
             db.session.rollback()
-            return ERROR_DELETING_FOLLOW_TABLE
+            return ERROR_DELETING_LIKE_TABLE
 
 
