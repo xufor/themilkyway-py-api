@@ -24,6 +24,7 @@ UNLIKE_UNSUCCESSFUL = 'Removing like unsuccessful.'
 UNLIKE_SUCCESSFUL = 'Removing like successful.'
 ALREADY_LIKED = 'Already liked.'
 NOT_LIKED = 'Not already liked.'
+NO_FAVOURITES = 'No favourites found.'
 INVALID_REQUEST = 'Invalid request.'
 
 
@@ -84,4 +85,25 @@ class Like(Resource):
                     StoryModel.reduce_likes_by_one(unlike_object.target)
                     return {'message': UNLIKE_SUCCESSFUL}, 200
         return {'message': NOT_LIKED}, 400
+
+    # For returning the favourites of a user
+    @jwt_required
+    def get(self):
+        # Extract user who tends to like from jwt
+        current_user = get_jwt_identity()
+        # Creating an for the requesting active user
+        active_user_object = ActiveModel.find_entry_by_uid(current_user)
+        # Return the favourites
+        favourites = active_user_object.favourites
+        # Return favourites and if there are no favourites then empty list is returned
+        return {'favourites': [
+            {
+                'sid': like.liked.sid,
+                'uid': like.liked.uid,
+                'title': like.liked.title,
+                'name': like.liked.author.name,
+                'summary': like.liked.summary,
+                'time': str(like.liked.time)
+            } for like in favourites
+        ]}
 
