@@ -30,7 +30,7 @@ class Submit(Resource):
         story_object.uid = get_jwt_identity()
         story_object.sid = StoryModel.generate_fresh_sid()
         story_object.status = 'unapproved'
-        story_object.reads = 0
+        story_object.views = 0
         story_object.likes = 0
         # Creating a new entry in story table and checking for success
         if story_object.create_story() == ERROR_WRITING_STORY_TABLE:

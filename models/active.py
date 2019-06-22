@@ -5,6 +5,7 @@ from db import db
 from models.stories import StoryModel  # Do not remove
 from models.follow import FollowModel  # Do not remove
 from models.like import LikeModel      # Do not remove
+from models.views import ViewsModel    # Do not remove
 
 
 ERROR_WRITING_ACTIVE_TABLE = 'Error writing active table.'
@@ -26,6 +27,8 @@ class ActiveModel(db.Model):
                                 backref='following', lazy='dynamic')
     favourites = db.relationship('LikeModel', foreign_keys='LikeModel.source',
                                  backref='fan', lazy='dynamic')
+    viewed = db.relationship('ViewsModel', foreign_keys='ViewsModel.source',
+                             backref='viewers', lazy='dynamic')
 
     @classmethod
     def find_entry_by_email(cls, query_email):

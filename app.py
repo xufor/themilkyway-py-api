@@ -21,6 +21,7 @@ from resources.drop import Drop
 from resources.test import Test
 from resources.follow import Follow
 from resources.like import Like
+from resources.read import Read
 from models.blacklist import BlacklistModel
 from dummy import UID
 
@@ -96,6 +97,7 @@ api.add_resource(Drop, '/drop')
 api.add_resource(Test, '/test')
 api.add_resource(Follow, '/follow')
 api.add_resource(Like, '/like')
+api.add_resource(Read, '/read')
 
 if __name__ == '__main__':
     ma.init_app(app)

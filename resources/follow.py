@@ -74,5 +74,6 @@ class Follow(Resource):
             if list_item.target == unfollow_object.target:
                 if list_item.delete_entry() == ERROR_DELETING_FOLLOW_TABLE:
                     return {'message': UNFOLLOW_UNSUCCESSFUL}, 500
-                return {'message': UNFOLLOW_SUCCESSFUL}, 200
+                else:
+                    return {'message': UNFOLLOW_SUCCESSFUL}, 200
         return {'message': NOT_FOLLOWING}, 400

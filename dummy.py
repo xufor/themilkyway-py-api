@@ -3941,8 +3941,8 @@ def create_dummy_data():
         cur.execute('INSERT INTO active (uid, time, name, email, password) VALUES (%s, %s, %s, %s, %s)',
                     (UID[i], TIME[i], NAMES[i], ('.'.join(NAMES[i].split()) + '@gmail.com'), HASHES[i]))
     for i in range(10):
-        cur.execute('INSERT INTO stories (sid, uid, status, time, title, summary, story, reads, likes) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                    (SID[i], AUTHORS[i], 'unapproved', SUB_TIME[i], TITLES[i], f'Summary{i}', STORIES[i],
+        cur.execute('INSERT INTO stories (sid, uid, status, time, title, summary, story, views, likes) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                    (SID[i], AUTHORS[i], status(i), SUB_TIME[i], TITLES[i], f'Summary{i}', STORIES[i],
                      random.randint(10000, 30000), random.randint(10000, 30000), ))
     conn.commit()
     cur.close()

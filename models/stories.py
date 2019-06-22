@@ -2,7 +2,8 @@ import uuid
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
-from models.like import LikeModel  # Do not delete
+from models.like import LikeModel   # Do not delete
+from models.views import ViewsModel # Do not delete
 
 ERROR_WRITING_STORY_TABLE = 'Error writing story table.'
 ERROR_DELETING_STORY_TABLE = 'Error deleting from story table.'
@@ -19,10 +20,12 @@ class StoryModel(db.Model):
     title = db.Column(db.VARCHAR(500), nullable=False)
     summary = db.Column(db.TEXT, nullable=False)
     story = db.Column(db.TEXT, nullable=False)
-    reads = db.Column(db.BIGINT, nullable=False)
+    views = db.Column(db.BIGINT, nullable=False)
     likes = db.Column(db.BIGINT, nullable=False)
     fans = db.relationship('LikeModel', foreign_keys='LikeModel.target',
-                           backref='favourite', lazy='dynamic')
+                           backref='liked', lazy='dynamic')
+    viewers = db.relationship('ViewsModel', foreign_keys='ViewsModel.target',
+                              backref='viewed', lazy='dynamic')
 
     @classmethod
     def find_entry_by_sid(cls, query_sid):
@@ -46,6 +49,24 @@ class StoryModel(db.Model):
     @classmethod
     def find_story_by_sid(cls, query_sid):
         return cls.query.filter_by(sid=query_sid).first()
+
+    @classmethod
+    def add_views_by_one(cls, query_sid):
+        discovered_entry = cls.find_story_by_sid(query_sid)
+        discovered_entry.views += 1
+        discovered_entry.create_story()
+
+    @classmethod
+    def add_likes_by_one(cls, query_sid):
+        discovered_entry = cls.find_story_by_sid(query_sid)
+        discovered_entry.likes += 1
+        discovered_entry.create_story()
+
+    @classmethod
+    def reduce_likes_by_one(cls, query_sid):
+        discovered_entry = cls.find_story_by_sid(query_sid)
+        discovered_entry.likes -= 1
+        discovered_entry.create_story()
 
     def create_story(self):
         try:
