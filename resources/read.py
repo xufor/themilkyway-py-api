@@ -7,6 +7,7 @@ from flask_jwt_extended import (
 from flask_restful import Resource
 
 from schemas.view import ViewSchema
+from schemas.story import StorySchema
 from models.active import ActiveModel
 from models.stories import StoryModel
 from models.views import (
@@ -14,6 +15,7 @@ from models.views import (
 )
 
 view_schema = ViewSchema()
+story_schema = StorySchema()
 
 VIEW_SUCCESSFUL = 'View Successful.'
 VIEW_UNSUCCESSFUL = 'View Unsuccessful.'
@@ -42,18 +44,12 @@ class Read(Resource):
                 return {'message': VIEW_UNSUCCESSFUL}, 500
             # Add the number of views by one
             StoryModel.add_views_by_one(view_object.target)
-        # Return the requested story
-        return {
-            'uid': discovered_story.uid,
-            'sid': discovered_story.sid,
-            'story': discovered_story.story,
-            'title': discovered_story.title,
-            'summary': discovered_story.summary,
-            'likes': discovered_story.likes,
-            'name': discovered_story.author.name,
-            'views': discovered_story.views,
-            'time': str(discovered_story.time),
-        }
+        # Use dump to create a dictionary
+        story_data = story_schema.dump(discovered_story)
+        # Pop status and add the name of the author
+        story_data.pop('status')
+        story_data['name'] = discovered_story.author.name
+        return story_data
 
 
 

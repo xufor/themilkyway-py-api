@@ -4,6 +4,7 @@ import psycopg2
 def drop_all_tables():
     conn = psycopg2.connect(dbname='themilkyway', user='postgres', password='1999')
     cur = conn.cursor()
+    cur.execute('DROP TABLE BASIC')
     cur.execute('DROP TABLE "like"')
     cur.execute('DROP TABLE VIEWS')
     cur.execute('DROP TABLE FOLLOW')

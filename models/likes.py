@@ -5,9 +5,9 @@ ERROR_WRITING_LIKE_TABLE = 'Error writing likes table.'
 ERROR_DELETING_LIKE_TABLE = 'Error deleting from likes table.'
 
 
-class LikeModel(db.Model):
+class LikesModel(db.Model):
 
-    __tablename__ = 'like'
+    __tablename__ = 'likes'
 
     sno = db.Column(db.INTEGER, autoincrement=True, primary_key=True)
     source = db.Column(db.VARCHAR(6), db.ForeignKey('active.uid'), nullable=False)

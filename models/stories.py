@@ -2,7 +2,7 @@ import uuid
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
-from models.like import LikeModel   # Do not delete
+from models.likes import LikesModel   # Do not delete
 from models.views import ViewsModel # Do not delete
 
 ERROR_WRITING_STORY_TABLE = 'Error writing story table.'
@@ -22,14 +22,14 @@ class StoryModel(db.Model):
     story = db.Column(db.TEXT, nullable=False)
     views = db.Column(db.BIGINT, nullable=False)
     likes = db.Column(db.BIGINT, nullable=False)
-    fans = db.relationship('LikeModel', foreign_keys='LikeModel.target',
+    fans = db.relationship('LikesModel', foreign_keys='LikesModel.target',
                            backref='liked', lazy='dynamic')
     viewers = db.relationship('ViewsModel', foreign_keys='ViewsModel.target',
                               backref='viewed', lazy='dynamic')
 
     @classmethod
     def find_entry_by_sid(cls, query_sid):
-        return cls.query.filter_by(sid=query_sid).first()
+        return cls.query.get(query_sid)
 
     @classmethod
     def find_entry_by_uid(cls, query_uid):

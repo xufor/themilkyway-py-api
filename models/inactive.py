@@ -20,7 +20,7 @@ class InactiveModel(db.Model):
     # only writing email.
     @classmethod
     def find_entry_by_email(cls, query_email):
-        return cls.query.filter_by(email=query_email).first()
+        return cls.query.get(query_email)
 
     @classmethod
     def send_email(cls, recipient):

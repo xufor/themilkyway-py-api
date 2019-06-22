@@ -9,7 +9,7 @@ from flask_restful import Resource
 from schemas.like import LikeSchema
 from models.stories import StoryModel
 from models.active import ActiveModel
-from models.like import (
+from models.likes import (
     ERROR_WRITING_LIKE_TABLE,
     ERROR_DELETING_LIKE_TABLE
 )
@@ -93,17 +93,15 @@ class Like(Resource):
         current_user = get_jwt_identity()
         # Creating an for the requesting active user
         active_user_object = ActiveModel.find_entry_by_uid(current_user)
-        # Return the favourites
-        favourites = active_user_object.favourites
         # Return favourites and if there are no favourites then empty list is returned
         return {'favourites': [
             {
-                'sid': like.liked.sid,
-                'uid': like.liked.uid,
-                'title': like.liked.title,
-                'name': like.liked.author.name,
-                'summary': like.liked.summary,
-                'time': str(like.liked.time)
-            } for like in favourites
+                'sid': like_object.liked.sid,
+                'uid': like_object.liked.uid,
+                'title': like_object.liked.title,
+                'name': like_object.liked.author.name,
+                'summary': like_object.liked.summary,
+                'time': str(like_object.liked.time)
+            } for like_object in active_user_object.favourites
         ]}
 
