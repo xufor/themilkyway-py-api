@@ -28,13 +28,16 @@ class Search(Resource):
         for user in active_user_objects:
             if user.uid == current_user:
                 active_user_objects.remove(user)
-        # Return results and if there are no favourites then empty list is returned
+        # Slice the results according to the need
+        if incoming_version > 1:
+            active_user_objects = active_user_objects[(incoming_version-1)*15:]
+        # Return results and if there are no users matching the criteria then return empty list
+        # Return empty list if there are no more versions with users matching the criteria
         return {'results': [
             {
                 'uid': user.uid,
                 'name': user.name,
                 'image': user.basic.image if user.basic is not None else NO_IMAGE_AVAILABLE
             }
-            for user in active_user_objects],
-            'final': len(active_user_objects) <= incoming_version * 15
+            for user in active_user_objects]
         }
