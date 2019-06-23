@@ -91,7 +91,8 @@ class Profile(Resource):
                     'following': [{
                         'uid': following.target,
                         'name': following.following.name
-                    } for following in active_user_object.following],
+                    } for following in active_user_object.following]
+                    if (not active_user_object.basic.private) else IS_PRIVATE,
                     'followers': [{
                         'uid': followers.source,
                         'name': followers.followers.name,
@@ -106,7 +107,13 @@ class Profile(Resource):
                         'summary': like.liked.summary,
                         'title': like.liked.title
                     } for like in active_user_object.favourites]
+                    if (not active_user_object.basic.private) else IS_PRIVATE,
+                    'achievements': {
+                        'views': active_user_object.views,
+                        'likes': active_user_object.likes
+                    }
                 }
+
 
 
 
