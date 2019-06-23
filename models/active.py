@@ -21,6 +21,8 @@ class ActiveModel(db.Model):
     name = db.Column(db.VARCHAR(80), nullable=False)
     email = db.Column(db.VARCHAR(100), nullable=False, unique=True)
     password = db.Column(db.VARCHAR(60), nullable=False)
+    views = db.Column(db.BIGINT, nullable=False)
+    likes = db.Column(db.BIGINT, nullable=False)
     submissions = db.relationship('StoryModel', backref='author', lazy='dynamic')
     basic = db.relationship('BasicModel', backref='strong', uselist=False)
     following = db.relationship('FollowModel', foreign_keys='FollowModel.source',
@@ -47,6 +49,28 @@ class ActiveModel(db.Model):
     @classmethod
     def generate_random_uid(cls):
         return uuid.uuid4().hex.lower()[0:6]
+
+    @classmethod
+    def generate_elite_users(cls):
+        return cls.query.order_by(cls.likes.desc()).limit(3).all()
+
+    @classmethod
+    def add_views_by_one(cls, query_uid):
+        discovered_entry = cls.find_entry_by_uid(query_uid)
+        discovered_entry.views += 1
+        discovered_entry.create_active_user()
+
+    @classmethod
+    def add_likes_by_one(cls, query_uid):
+        discovered_entry = cls.find_entry_by_uid(query_uid)
+        discovered_entry.likes += 1
+        discovered_entry.create_active_user()
+
+    @classmethod
+    def reduce_likes_by_one(cls, query_uid):
+        discovered_entry = cls.find_entry_by_uid(query_uid)
+        discovered_entry.likes -= 1
+        discovered_entry.create_active_user()
 
     @classmethod
     def generate_fresh_uid(cls):

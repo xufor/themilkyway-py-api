@@ -51,8 +51,9 @@ class Confirm(Resource):
             active_user_object.time = time.asctime(time.localtime(time.time()))
             # Adding the uid field using inbuilt uuid module
             active_user_object.uid = ActiveModel.generate_fresh_uid()
+            # Setting likes and views to zero
+            active_user_object.likes, active_user_object.views = 0, 0
             if active_user_object.create_active_user() == ERROR_WRITING_ACTIVE_TABLE:
-                discovered_inactive_user.create_inactive_user()
                 return make_response(render_template('conf_page.html', message=SERVER_ERROR), 500, headers)
             else:
                 return make_response(render_template('conf_page.html', message=CONFIRMATION_SUCCESSFUL), 200, headers)

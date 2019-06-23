@@ -3938,8 +3938,9 @@ def create_dummy_data():
     conn = psycopg2.connect(dbname='themilkyway', user='postgres', password='1999')
     cur = conn.cursor()
     for i in range(6):
-        cur.execute('INSERT INTO active (uid, time, name, email, password) VALUES (%s, %s, %s, %s, %s)',
-                    (UID[i], TIME[i], NAMES[i], ('.'.join(NAMES[i].split()) + '@gmail.com'), HASHES[i]))
+        cur.execute('INSERT INTO active (uid, time, name, email, password, likes,views) VALUES (%s, %s, %s, %s, %s, %s, %s)',
+                    (UID[i], TIME[i], NAMES[i], ('.'.join(NAMES[i].lower().split()) + '@gmail.com'), HASHES[i],
+                     random.randint(10000, 30000), random.randint(10000, 30000),))
     for i in range(10):
         cur.execute('INSERT INTO stories (sid, uid, status, time, title, summary, story, views, likes) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
                     (SID[i], AUTHORS[i], status(i), SUB_TIME[i], TITLES[i], f'Summary{i}', STORIES[i],

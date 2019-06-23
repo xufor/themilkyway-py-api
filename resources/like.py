@@ -54,8 +54,9 @@ class Like(Resource):
         # Check for write errors and return appropriate messages
         if like_object.create_entry() == ERROR_WRITING_LIKE_TABLE:
             return {'message': LIKE_UNSUCCESSFUL}, 500
-        # Now add the number of likes by one
+        # Now add the number of likes by one for story as well as author
         StoryModel.add_likes_by_one(like_object.target)
+        ActiveModel.add_likes_by_one(discovered_story.author.uid)
         # Send a success message
         return {'message': LIKE_SUCCESSFUL}, 202
 
@@ -81,8 +82,9 @@ class Like(Resource):
                 if list_item.delete_entry() == ERROR_DELETING_LIKE_TABLE:
                     return {'message': UNLIKE_UNSUCCESSFUL}, 500
                 else:
-                    # Now reduce the number of likes by one
+                    # Now reduce the number of likes by one for story as well as author
                     StoryModel.reduce_likes_by_one(unlike_object.target)
+                    ActiveModel.reduce_likes_by_one(discovered_story.author.uid)
                     return {'message': UNLIKE_SUCCESSFUL}, 200
         return {'message': NOT_LIKED}, 400
 

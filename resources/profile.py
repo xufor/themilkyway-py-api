@@ -29,6 +29,7 @@ class Profile(Resource):
         # Creating an for the requesting active user
         active_user_object = ActiveModel.find_entry_by_uid(current_user)
         # Check if basic data already exists
+        # If no image was uploaded the the frontend is expected to send the field empty.
         existing_basic_object = active_user_object.basic
         if not existing_basic_object:
             fresh_basic_object.uid = current_user

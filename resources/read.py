@@ -44,11 +44,16 @@ class Read(Resource):
                 return {'message': VIEW_UNSUCCESSFUL}, 500
             # Add the number of views by one
             StoryModel.add_views_by_one(view_object.target)
+            ActiveModel.add_views_by_one(discovered_story.author.uid)
         # Use dump to create a dictionary
         story_data = story_schema.dump(discovered_story)
         # Pop status and add the name of the author
         story_data.pop('status')
+        story_data.pop('author')
+        story_data.pop('viewers')
+        story_data.pop('fans')
         story_data['name'] = discovered_story.author.name
+        story_data['uid'] = discovered_story.author.uid
         return story_data
 
 

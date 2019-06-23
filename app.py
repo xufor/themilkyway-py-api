@@ -24,6 +24,7 @@ from resources.like import Like
 from resources.read import Read
 from resources.search import Search
 from resources.profile import Profile
+from resources.elite import Elite
 from models.blacklist import BlacklistModel
 from dummy import UID
 
@@ -102,6 +103,7 @@ api.add_resource(Like, '/like')
 api.add_resource(Read, '/read')
 api.add_resource(Profile, '/profile')
 api.add_resource(Search, '/search')
+api.add_resource(Elite, '/elite')
 
 if __name__ == '__main__':
     ma.init_app(app)

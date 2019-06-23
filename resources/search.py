@@ -10,7 +10,7 @@ from schemas.search import SearchSchema
 
 search_schema = SearchSchema()
 
-NO_IMAGE_AVAILABLE = 'No Image available'
+NO_IMAGE_AVAILABLE = 'No Image available.'
 
 
 class Search(Resource):
@@ -37,7 +37,7 @@ class Search(Resource):
             {
                 'uid': user.uid,
                 'name': user.name,
-                'image': user.basic.image if user.basic is not None else NO_IMAGE_AVAILABLE
+                'image': user.basic.image if (user.basic and user.basic.image is not 'no-image') else NO_IMAGE_AVAILABLE
             }
             for user in active_user_objects]
         }
