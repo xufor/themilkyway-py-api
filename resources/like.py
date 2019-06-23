@@ -88,22 +88,4 @@ class Like(Resource):
                     return {'message': UNLIKE_SUCCESSFUL}, 200
         return {'message': NOT_LIKED}, 400
 
-    # For returning the favourites of a user
-    @jwt_required
-    def get(self):
-        # Extract user who tends to like from jwt
-        current_user = get_jwt_identity()
-        # Creating an for the requesting active user
-        active_user_object = ActiveModel.find_entry_by_uid(current_user)
-        # Return favourites and if there are no favourites then empty list is returned
-        return {'favourites': [
-            {
-                'sid': like_object.liked.sid,
-                'uid': like_object.liked.uid,
-                'title': like_object.liked.title,
-                'name': like_object.liked.author.name,
-                'summary': like_object.liked.summary,
-                'time': str(like_object.liked.time)
-            } for like_object in active_user_object.favourites
-        ]}
 
