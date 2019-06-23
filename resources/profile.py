@@ -113,7 +113,41 @@ class Profile(Resource):
                         'likes': active_user_object.likes
                     }
                 }
-
+        else:
+            # Create an object using request data
+            active_user_object = ActiveModel.find_entry_by_uid(get_jwt_identity())
+            return {
+                 'basic': basic_schema.dump(active_user_object.basic),
+                 'stories': [{
+                     'sid': story.sid,
+                     'uid': story.uid,
+                     'title': story.title,
+                     'name': story.author.name,
+                     'summary': story.summary
+                 } for story in active_user_object.submissions],
+                 'following': [{
+                     'uid': following.target,
+                     'name': following.following.name
+                 } for following in active_user_object.following],
+                 'followers': [{
+                     'uid': followers.source,
+                     'name': followers.followers.name,
+                     'image': followers.followers.basic.image
+                     if (followers.followers.basic and followers.followers.basic.image)
+                     else NO_IMAGE_AVAILABLE
+                 } for followers in active_user_object.followers],
+                 'favourites': [{
+                     'uid': like.liked.uid,
+                     'sid': like.liked.sid,
+                     'name': like.liked.author.name,
+                     'summary': like.liked.summary,
+                     'title': like.liked.title
+                 } for like in active_user_object.favourites],
+                 'achievements': {
+                     'views': active_user_object.views,
+                     'likes': active_user_object.likes
+                 }
+             }
 
 
 
