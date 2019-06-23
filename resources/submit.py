@@ -8,6 +8,7 @@ from flask_jwt_extended import (
 
 from db import db
 from schemas.story import StorySchema
+from resources.profile import genres
 from models.stories import (
     StoryModel,
     ERROR_WRITING_STORY_TABLE
@@ -17,6 +18,7 @@ story_schema = StorySchema()
 
 ERROR_SUBMITTING_STORY = 'Error in submitting story.'
 STORY_SUCCESSFULLY_SUBMITTED = 'Story successfully submitted.'
+INVALID_GENRE = 'The provided genres are not valid.'
 
 
 class Submit(Resource):
@@ -25,6 +27,11 @@ class Submit(Resource):
     def post(self):
         # Loaded incoming data into story
         story_object = story_schema.load(request.get_json(), db.session)
+        # Check if the the genres is valid or not
+        # Accepts 3 genres oly
+        genre_list = story_object.genre.split(',')
+        if not (len(genre_list) <= 3 and set(genre_list).issubset(set(genres))):
+            return {'message': INVALID_GENRE}
         # Adding time, uid and sid fields to story object
         story_object.time = time.asctime(time.localtime(time.time()))
         story_object.uid = get_jwt_identity()

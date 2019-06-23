@@ -22,6 +22,7 @@ class StoryModel(db.Model):
     story = db.Column(db.TEXT, nullable=False)
     views = db.Column(db.BIGINT, nullable=False)
     likes = db.Column(db.BIGINT, nullable=False)
+    genre = db.Column(db.VARCHAR(75), nullable=False)
     fans = db.relationship('LikesModel', foreign_keys='LikesModel.target',
                            backref='liked', lazy='dynamic')
     viewers = db.relationship('ViewsModel', foreign_keys='ViewsModel.target',

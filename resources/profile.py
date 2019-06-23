@@ -63,6 +63,7 @@ class Profile(Resource):
                 return {'message': UPDATE_UNSUCCESSFUL}
             return {'message': UPDATE_SUCCESSFUL}
 
+    # For fetching profile
     @jwt_optional
     def post(self):
         # Extract user who tends to like from jwt
