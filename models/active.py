@@ -10,6 +10,7 @@ from models.basic import BasicModel    # Do not remove
 
 
 ERROR_WRITING_ACTIVE_TABLE = 'Error writing active table.'
+NO_IMAGE_AVAILABLE = 'No Image available.'
 
 
 class ActiveModel(db.Model):
@@ -78,6 +79,18 @@ class ActiveModel(db.Model):
         while cls.find_entry_by_uid(fresh_uid) is not None:
             fresh_uid = cls.generate_random_code()
         return fresh_uid
+
+    @classmethod
+    def generate_search_data(cls, active_user_list):
+        return [
+            {
+                'uid': active_user.uid,
+                'name': active_user.name,
+                'image': active_user.basic.image
+                if (active_user.basic and active_user.basic.image != 'no-image')
+                else NO_IMAGE_AVAILABLE
+            } for active_user in active_user_list
+        ]
 
     def create_active_user(self):
         try:
