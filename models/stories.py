@@ -52,6 +52,32 @@ class StoryModel(db.Model):
         return cls.query.filter_by(sid=query_sid).first()
 
     @classmethod
+    def find_stories_by_genre(cls, query_genre, version):
+        return cls.query.filter(cls.genre.like(f'%{query_genre}%')).limit(version * 15).all()
+
+    @classmethod
+    def find_stories_by_title(cls, query_title, version):
+        return cls.query.filter(cls.title.like(f'%{query_title}%')).limit(version * 15).all()
+
+    @classmethod
+    def check_story_status(cls, story_object):
+        return story_object.status == 'approved'
+
+    @classmethod
+    def filter_story_object_list(cls, story_object_list):
+        return filter(StoryModel.check_story_status, story_object_list)
+
+    @classmethod
+    def generate_story_element_data(cls, story_object):
+        return {
+            'uid': story_object.uid,
+            'sid': story_object.sid,
+            'title': story_object.title,
+            'name': story_object.author.name,
+            'summary': story_object.summary,
+        }
+
+    @classmethod
     def add_views_by_one(cls, query_sid):
         discovered_entry = cls.find_story_by_sid(query_sid)
         discovered_entry.views += 1

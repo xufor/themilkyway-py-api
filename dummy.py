@@ -3944,7 +3944,7 @@ def create_dummy_data():
     for i in range(10):
         cur.execute('INSERT INTO stories (sid, uid, status, time, title, summary, story, views, likes, genre) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                     (SID[i], AUTHORS[i], status(i), SUB_TIME[i], TITLES[i], f'Summary{i}', STORIES[i],
-                     random.randint(10000, 30000), random.randint(10000, 30000), 'fiction'))
+                     random.randint(10000, 30000), random.randint(10000, 30000), 'Classic,Humor'))
     conn.commit()
     cur.close()
     conn.close()
