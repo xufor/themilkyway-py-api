@@ -9,7 +9,13 @@ from flask_restful import Resource
 from schemas.basic import BasicSchema
 from schemas.profile import ProfileSchema
 from models.active import ActiveModel
-from models.basic import ERROR_WRITING_BASIC_TABLE
+from models.stories import StoryModel
+from models.basic import (
+    BasicModel,
+    ERROR_WRITING_BASIC_TABLE
+)
+from models.follow import FollowModel
+from models.likes import LikesModel
 from resources.elite import NO_IMAGE_AVAILABLE
 
 
@@ -79,36 +85,12 @@ class Profile(Resource):
                 return {
                     # If basic data is not yet added then empty dict will be returned
                     # If data is kept private then appropriate message is returned
-                    'basic': basic_schema.dump(active_user_object.basic) if
-                    not active_user_object.basic or not active_user_object.basic.private
-                    else IS_PRIVATE,
-                    'stories': [{
-                        'sid': story.sid,
-                        'uid': story.uid,
-                        'title': story.title,
-                        'name': story.author.name,
-                        'summary': story.summary
-                    } for story in active_user_object.submissions],
-                    'following': [{
-                        'uid': following.target,
-                        'name': following.following.name
-                    } for following in active_user_object.following]
-                    if (not active_user_object.basic.private) else IS_PRIVATE,
-                    'followers': [{
-                        'uid': followers.source,
-                        'name': followers.followers.name,
-                        'image': followers.followers.basic.image
-                        if (followers.followers.basic and followers.followers.basic.image)
-                        else NO_IMAGE_AVAILABLE
-                    } for followers in active_user_object.followers],
-                    'favourites': [{
-                        'uid': like.liked.uid,
-                        'sid': like.liked.sid,
-                        'name': like.liked.author.name,
-                        'summary': like.liked.summary,
-                        'title': like.liked.title
-                    } for like in active_user_object.favourites]
-                    if (not active_user_object.basic.private) else IS_PRIVATE,
+                    'basic': BasicModel.generate_basic_profile_data(active_user_object),
+                    'stories': [StoryModel.generate_story_element_data(story) for story
+                                in StoryModel.filter_story_object_list(active_user_object.submissions)],
+                    'following': FollowModel.generate_following_profile_data(active_user_object),
+                    'followers': FollowModel.generate_followers_profile_data(active_user_object),
+                    'favourites': LikesModel.generate_favourites_profile_data(active_user_object),
                     'achievements': {
                         'views': active_user_object.views,
                         'likes': active_user_object.likes
@@ -118,32 +100,12 @@ class Profile(Resource):
             # Create an object using request data
             active_user_object = ActiveModel.find_entry_by_uid(get_jwt_identity())
             return {
-                 'basic': basic_schema.dump(active_user_object.basic),
-                 'stories': [{
-                     'sid': story.sid,
-                     'uid': story.uid,
-                     'title': story.title,
-                     'name': story.author.name,
-                     'summary': story.summary
-                 } for story in active_user_object.submissions],
-                 'following': [{
-                     'uid': following.target,
-                     'name': following.following.name
-                 } for following in active_user_object.following],
-                 'followers': [{
-                     'uid': followers.source,
-                     'name': followers.followers.name,
-                     'image': followers.followers.basic.image
-                     if (followers.followers.basic and followers.followers.basic.image)
-                     else NO_IMAGE_AVAILABLE
-                 } for followers in active_user_object.followers],
-                 'favourites': [{
-                     'uid': like.liked.uid,
-                     'sid': like.liked.sid,
-                     'name': like.liked.author.name,
-                     'summary': like.liked.summary,
-                     'title': like.liked.title
-                 } for like in active_user_object.favourites],
+                 'basic': BasicModel.force_generate_basic_profile_data(active_user_object),
+                 'stories': [StoryModel.generate_story_element_data(story) for story
+                             in StoryModel.filter_story_object_list(active_user_object.submissions)],
+                 'following': FollowModel.force_generate_following_profile_data(active_user_object),
+                 'followers': FollowModel.generate_followers_profile_data(active_user_object),
+                 'favourites': LikesModel.force_generate_favourites_profile_data(active_user_object),
                  'achievements': {
                      'views': active_user_object.views,
                      'likes': active_user_object.likes

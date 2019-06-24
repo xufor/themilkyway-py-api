@@ -2,7 +2,9 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
 
+NO_IMAGE_AVAILABLE = 'No Image available.'
 ERROR_WRITING_BASIC_TABLE = 'Error writing basic table.'
+IS_PRIVATE = 'The author has decided not to show his private details.'
 
 
 class BasicModel(db.Model):
@@ -18,6 +20,40 @@ class BasicModel(db.Model):
     image = db.Column(db.VARCHAR(50), nullable=False)
     private = db.Column(db.BOOLEAN, nullable=False)
     preferences = db.Column(db.VARCHAR(100), nullable=False)
+
+    @classmethod
+    def generate_basic_profile_data(cls, active_user_object):
+        if active_user_object.basic is None:
+            return {'message': 'No data'}
+        elif active_user_object.basic.private:
+            return {'message': IS_PRIVATE}
+        return {
+            'bio': active_user_object.basic.bio,
+            'country': active_user_object.basic.country,
+            'email': active_user_object.basic.strong.email,
+            'profession': active_user_object.basic.profession,
+            'dob': str(active_user_object.basic.dob),
+            'image': active_user_object.basic.image
+            if active_user_object.basic.image != 'no-image'
+            else NO_IMAGE_AVAILABLE,
+            'name': active_user_object.name,
+        }
+
+    @classmethod
+    def force_generate_basic_profile_data(cls, active_user_object):
+        if active_user_object.basic is None:
+            return {'message': 'No data'}
+        return {
+            'bio': active_user_object.basic.bio,
+            'country': active_user_object.basic.country,
+            'email': active_user_object.email,
+            'name': active_user_object.name,
+            'image': active_user_object.basic.image
+            if active_user_object.basic.image != 'no-image'
+            else NO_IMAGE_AVAILABLE,
+            'profession': active_user_object.basic.profession,
+            'dob': str(active_user_object.basic.dob),
+        }
 
     def create_entry(self):
         try:
