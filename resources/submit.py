@@ -9,14 +9,23 @@ from flask_jwt_extended import (
 from db import db
 from schemas.story import StorySchema
 from schemas.edit import EditSchema
+from schemas.approve import ApproveSchema
 from resources.profile import genres
+from models.active import (
+    ActiveModel,
+    ERROR_WRITING_ACTIVE_TABLE
+)
 from models.stories import (
     StoryModel,
-    ERROR_WRITING_STORY_TABLE
+    ERROR_WRITING_STORY_TABLE,
+    ERROR_DELETING_STORY_TABLE
 )
+from models.views import ERROR_DELETING_VIEWS_TABLE
+from models.likes import ERROR_DELETING_LIKE_TABLE
 
 story_schema = StorySchema()
 edit_schema = EditSchema()
+delete_schema = ApproveSchema()
 
 ERROR_SUBMITTING_STORY = 'Error in submitting story.'
 STORY_SUCCESSFULLY_SUBMITTED = 'Story successfully submitted.'
@@ -26,10 +35,12 @@ INVALID_REQUEST = 'Invalid request.'
 SUMMARY_TOO_LONG = 'Summary cannot be greater than length of 80 words.'
 STORY_TOO_LONG = 'Story cannot be greater than length of 10000 words.'
 TITLE_TOO_LONG = 'Title cannot be greater than length of 10 words.'
+OPERATION_UNSUCCESSFUL = 'Operation unsuccessful.'
+OPERATION_SUCCESSFUL = 'Operation successful.'
 
 
 class Submit(Resource):
-    # This method only requires story and summary as json
+    # For submitting a story
     @jwt_required
     def post(self):
         # Loaded incoming data into story
@@ -58,6 +69,7 @@ class Submit(Resource):
             return {'message': ERROR_SUBMITTING_STORY}, 500
         return {'message': STORY_SUCCESSFULLY_SUBMITTED}, 201
 
+    # For editing a story
     @jwt_required
     def put(self):
         # Loaded incoming data into dict
@@ -75,6 +87,45 @@ class Submit(Resource):
             if discovered_story.create_story() == ERROR_WRITING_STORY_TABLE:
                 return {'message': ERROR_SUBMITTING_STORY}, 500
         return {'message': STORY_SUCCESSFULLY_UPDATED}, 200
+
+    # For deleting a story
+    @jwt_required
+    def delete(self):
+        # Extract and parse the data from request
+        delete_data = delete_schema.load(request.get_json())
+        # Create an object of requesting user
+        active_user_object = ActiveModel.find_entry_by_uid(get_jwt_identity())
+        # Check if the story is present in submissions and has valid status
+        for story in active_user_object.submissions:
+            if story.sid == delete_data['sid'] and StoryModel.check_story_status(story):
+                # Set counter to zero
+                ctr = 0
+                # Delete all likes
+                for fan in story.fans:
+                    ctr += 1
+                    if fan.delete_entry() == ERROR_DELETING_LIKE_TABLE:
+                        return {'message': OPERATION_UNSUCCESSFUL}
+                # Decrease the total likes of the user
+                active_user_object.likes -= ctr
+                # Set counter to zero
+                ctr = 0
+                # Delete all views
+                for viewer in story.viewers:
+                    ctr += 1
+                    if viewer.delete_entry() == ERROR_DELETING_VIEWS_TABLE:
+                        return {'message': OPERATION_UNSUCCESSFUL}
+                # Decrease the total views of the user
+                active_user_object.views -= ctr
+                # Commit changes done to active user
+                if active_user_object.create_active_user() == ERROR_WRITING_ACTIVE_TABLE:
+                    return {'message': OPERATION_UNSUCCESSFUL}
+                # Delete the story
+                if story.delete_story() == ERROR_DELETING_STORY_TABLE:
+                    return {'message': OPERATION_UNSUCCESSFUL}
+                return {'message': OPERATION_SUCCESSFUL}
+        return {'message': INVALID_REQUEST}
+
+
 
 
 

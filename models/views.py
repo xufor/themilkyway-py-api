@@ -2,6 +2,7 @@ from db import db
 from sqlalchemy.exc import SQLAlchemyError
 
 ERROR_WRITING_VIEWS_TABLE = 'Error writing views table.'
+ERROR_DELETING_VIEWS_TABLE = 'Error deleting from views table.'
 
 
 class ViewsModel(db.Model):
@@ -20,5 +21,13 @@ class ViewsModel(db.Model):
         except SQLAlchemyError:
             db.session.rollback()
             return ERROR_WRITING_VIEWS_TABLE
+
+    def delete_entry(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except SQLAlchemyError:
+            db.session.rollback()
+            return ERROR_DELETING_VIEWS_TABLE
 
 
