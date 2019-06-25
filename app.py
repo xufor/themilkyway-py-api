@@ -27,6 +27,7 @@ from resources.search import Search
 from resources.profile import Profile
 from resources.elite import Elite
 from resources.genre import Genre
+from resources.feed import Feed
 from models.blacklist import BlacklistModel
 from dummy import UID
 
@@ -108,6 +109,7 @@ api.add_resource(Profile, '/profile')
 api.add_resource(Search, '/search')
 api.add_resource(Elite, '/elite')
 api.add_resource(Genre, '/genre')
+api.add_resource(Feed, '/feed')
 
 if __name__ == '__main__':
     ma.init_app(app)

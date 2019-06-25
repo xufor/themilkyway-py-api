@@ -56,8 +56,16 @@ class StoryModel(db.Model):
         return cls.query.filter(cls.genre.like(f'%{query_genre}%')).limit(version * 15).all()
 
     @classmethod
+    def find_feed_stories_by_genre(cls, query_genre, version):
+        return cls.query.filter(cls.genre.like(f'%{query_genre}%')).order_by(cls.time.desc()).limit(version*5).all()
+
+    @classmethod
     def find_stories_by_title(cls, query_title, version):
         return cls.query.filter(cls.title.like(f'%{query_title}%')).limit(version * 15).all()
+
+    @classmethod
+    def find_latest_story_by_uid(cls, query_uid):
+        return cls.query.filter_by(uid=query_uid).order_by(cls.time.desc()).first()
 
     @classmethod
     def check_story_status(cls, story_object):

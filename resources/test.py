@@ -1,9 +1,9 @@
 from flask_restful import Resource
-from models.active import ActiveModel
+from models.active import StoryModel
 
 
 class Test(Resource):
     @classmethod
     def get(cls):
-        x = ActiveModel.query.filter_by(uid='c13ba7').first()
-        return {'result': [x.followers.name for x in x.following]}
+        x = StoryModel.find_feed_stories_by_genre('Classic', 1)
+        return {'result': [StoryModel.generate_story_element_data(obj) for obj in x]}
