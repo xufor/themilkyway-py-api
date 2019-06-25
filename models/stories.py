@@ -17,7 +17,7 @@ class StoryModel(db.Model):
     uid = db.Column(db.VARCHAR(6), db.ForeignKey('active.uid'))
     status = db.Column(db.VARCHAR(10), nullable=False)
     time = db.Column(db.TIMESTAMP, nullable=False)
-    title = db.Column(db.VARCHAR(500), nullable=False)
+    title = db.Column(db.TEXT, nullable=False)
     summary = db.Column(db.TEXT, nullable=False)
     story = db.Column(db.TEXT, nullable=False)
     views = db.Column(db.BIGINT, nullable=False)
@@ -66,6 +66,18 @@ class StoryModel(db.Model):
     @classmethod
     def filter_story_object_list(cls, story_object_list):
         return filter(StoryModel.check_story_status, story_object_list)
+
+    @classmethod
+    def words_counter(cls, string):
+        count = 0
+        l1 = string.split('*/para/**/newline/*')
+        l2 = [i.split("*/para/*") for i in l1]
+        l3 = [[f.split()for f in a] for a in l2]
+        for a in l3:
+            for b in a:
+                for c in b:
+                    count += 1
+        return count
 
     @classmethod
     def generate_story_element_data(cls, story_object):
