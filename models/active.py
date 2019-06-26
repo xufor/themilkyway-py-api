@@ -77,7 +77,7 @@ class ActiveModel(db.Model):
     def generate_fresh_uid(cls):
         fresh_uid = cls.generate_random_uid()
         while cls.find_entry_by_uid(fresh_uid) is not None:
-            fresh_uid = cls.generate_random_code()
+            fresh_uid = cls.generate_random_uid()
         return fresh_uid
 
     @classmethod
