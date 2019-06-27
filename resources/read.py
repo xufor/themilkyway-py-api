@@ -54,6 +54,7 @@ class Read(Resource):
         story_data.pop('fans')
         story_data['name'] = discovered_story.author.name
         story_data['uid'] = discovered_story.author.uid
+        story_data['already_liked'] = view_object.target in [like.target for like in active_user_object.favourites]
         return story_data
 
 
