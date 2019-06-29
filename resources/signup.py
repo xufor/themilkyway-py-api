@@ -26,18 +26,18 @@ class SignUp(Resource):
         inactive_user_object = inactive_schema.load(request.get_json(), db.session)
 
         if ActiveModel.find_entry_by_email(inactive_user_object.email) is not None:
-            return {'message': ACTIVE_USER_FOUND}
+            return {'message': ACTIVE_USER_FOUND}, 400
 
         if InactiveModel.find_entry_by_email(inactive_user_object.email) is None:
             email_delivery_response = InactiveModel.send_email(inactive_user_object.email)
         else:
-            return {'message': INACTIVE_USER_FOUND}
+            return {'message': INACTIVE_USER_FOUND}, 400
 
         # Checking if email was successfully sent or not
         if email_delivery_response is not None:
             # Checking password length and hashing it
             if len(inactive_user_object.password) > 72:
-                return {'message': INVALID_PASSWORD_LENGTH}
+                return {'message': INVALID_PASSWORD_LENGTH}, 400
 
             encoded_password = inactive_user_object.password.encode()
             hashed_password = bcrypt.hashpw(encoded_password, bcrypt.gensalt())
