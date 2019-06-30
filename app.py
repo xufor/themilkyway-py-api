@@ -1,3 +1,4 @@
+import time
 from flask import (
     Flask,
     jsonify
@@ -42,6 +43,8 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 10
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = 120
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 
@@ -61,17 +64,17 @@ def create_tables():
 
 @jwt.revoked_token_loader
 def when_token_is_revoked():
-    return jsonify({'message': TOKEN_REVOKED})
+    return jsonify({'message': TOKEN_REVOKED}), 401
 
 
 @jwt.expired_token_loader
 def when_token_is_revoked():
-    return jsonify({'message': TOKEN_EXPIRED})
+    return jsonify({'message': TOKEN_EXPIRED}), 401
 
 
 @jwt.invalid_token_loader
 def when_token_is_invalid(reason):
-    return jsonify({'message': TOKEN_INVALID, 'reason': reason})
+    return jsonify({'message': TOKEN_INVALID, 'reason': reason}), 401
 
 
 @jwt.user_claims_loader
