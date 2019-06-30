@@ -3934,6 +3934,13 @@ def status(i):
     else:
         return 'approved'
 
+IMGS = ['v1561862876/themilkyway/profile_pics/001.jpg',
+        'v1561862809/themilkyway/profile_pics/002.jpg',
+        'v1561862809/themilkyway/profile_pics/003.jpg',
+        'v1561862808/themilkyway/profile_pics/005.jpg',
+        'v1561866464/themilkyway/profile_pics/004.jpg'
+    ]
+
 def create_dummy_data():
     conn = psycopg2.connect(dbname='themilkyway', user='postgres', password='1999')
     cur = conn.cursor()
@@ -3947,7 +3954,7 @@ def create_dummy_data():
                      random.randint(10000, 30000), random.randint(10000, 30000), 'Classic,Humor'))
     for i in range(1,6):
         cur.execute('INSERT INTO basic (sno, uid, dob, bio, country, profession, image, private, preferences) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                    (i, UID[i], '06-06-2000', 'Hey! There I am on tmw!', 'India', 'Student', f'00{i}',
+                    (i, UID[i], '06-06-2000', 'Hey! There I am on tmw!', 'India', 'Student', IMGS[i-1],
                      False, 'Classic'))
     conn.commit()
     cur.close()
