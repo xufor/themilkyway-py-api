@@ -53,7 +53,7 @@ class ActiveModel(db.Model):
 
     @classmethod
     def generate_elite_users(cls):
-        return cls.query.order_by(cls.likes.desc()).limit(3).all()
+        return cls.query.order_by(cls.likes.desc()).limit(15).all()
 
     @classmethod
     def add_views_by_one(cls, query_uid):

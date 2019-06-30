@@ -3945,6 +3945,10 @@ def create_dummy_data():
         cur.execute('INSERT INTO stories (sid, uid, status, time, title, summary, story, views, likes, genre) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                     (SID[i], AUTHORS[i], status(i), SUB_TIME[i], TITLES[i], f'Summary{i}', STORIES[i],
                      random.randint(10000, 30000), random.randint(10000, 30000), 'Classic,Humor'))
+    for i in range(1,6):
+        cur.execute('INSERT INTO basic (sno, uid, dob, bio, country, profession, image, private, preferences) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                    (i, UID[i], '06-06-2000', 'Hey! There I am on tmw!', 'India', 'Student', f'00{i}',
+                     False, 'Classic'))
     conn.commit()
     cur.close()
     conn.close()
