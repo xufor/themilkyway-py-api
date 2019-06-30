@@ -3937,8 +3937,8 @@ def status(i):
 IMGS = ['v1561862876/themilkyway/profile_pics/001.jpg',
         'v1561862809/themilkyway/profile_pics/002.jpg',
         'v1561862809/themilkyway/profile_pics/003.jpg',
-        'v1561862808/themilkyway/profile_pics/005.jpg',
-        'v1561866464/themilkyway/profile_pics/004.jpg'
+        'v1561862808/themilkyway/profile_pics/004.jpg',
+        'v1561866464/themilkyway/profile_pics/005.jpg'
     ]
 
 def create_dummy_data():
