@@ -106,7 +106,7 @@ class StoryModel(db.Model):
             'title': story_object.title,
             'name': story_object.author.name,
             'summary': story_object.summary,
-            'time': story_object.time,
+            'time': str(story_object.time),
             'image': story_object.author.basic.image
             if (story_object.author.basic and story_object.author.basic.image is not 'no-image')
             else NO_IMAGE_AVAILABLE
