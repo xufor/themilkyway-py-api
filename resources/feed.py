@@ -43,4 +43,4 @@ class Feed(Resource):
         if incoming_version > 1:
             final_list = final_list[(incoming_version - 1) * 5 * (len(preferences_list) + 1):]
 
-        return {'results': [StoryModel.generate_story_element_data(story) for story in final_list]}
+        return {'results': [StoryModel.generate_feed_element_data(story) for story in final_list]}

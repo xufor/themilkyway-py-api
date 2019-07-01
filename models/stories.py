@@ -7,6 +7,7 @@ from models.views import ViewsModel # Do not delete
 
 ERROR_WRITING_STORY_TABLE = 'Error writing story table.'
 ERROR_DELETING_STORY_TABLE = 'Error deleting from story table.'
+NO_IMAGE_AVAILABLE = 'No Image available.'
 
 
 class StoryModel(db.Model):
@@ -95,6 +96,19 @@ class StoryModel(db.Model):
             'title': story_object.title,
             'name': story_object.author.name,
             'summary': story_object.summary,
+        }
+
+    @classmethod
+    def generate_feed_element_data(cls, story_object):
+        return {
+            'uid': story_object.uid,
+            'sid': story_object.sid,
+            'title': story_object.title,
+            'name': story_object.author.name,
+            'summary': story_object.summary,
+            'image': story_object.author.basic.image
+            if (story_object.author.basic and story_object.author.basic.image is not 'no-image')
+            else NO_IMAGE_AVAILABLE
         }
 
     @classmethod
