@@ -2,6 +2,7 @@ import uuid
 from sqlalchemy.exc import SQLAlchemyError
 
 from db import db
+from dummy import UID
 from models.stories import StoryModel  # Do not remove
 from models.follow import FollowModel  # Do not remove
 from models.likes import LikesModel      # Do not remove
@@ -53,7 +54,7 @@ class ActiveModel(db.Model):
 
     @classmethod
     def generate_elite_users(cls):
-        return cls.query.order_by(cls.likes.desc()).limit(15).all()
+        return cls.query.filter(cls.uid != UID[0]).order_by(cls.likes.desc()).limit(15).all()
 
     @classmethod
     def add_views_by_one(cls, query_uid):

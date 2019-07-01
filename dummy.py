@@ -3941,6 +3941,11 @@ IMGS = ['v1561862876/themilkyway/profile_pics/001.jpg',
         'v1561862808/themilkyway/profile_pics/004.jpg',
     ]
 
+SUMMARY = ['A perfect classic!', 'A perfect fiction!', 'A perfect crime story!',
+           'A perfect thriller!', 'A perfect mythology!', 'A perfect love story!',
+           'A perfect anecdote!', 'A perfect suspense!', 'A perfect drama!',
+           'A perfect historical-fiction!']
+
 def create_dummy_data():
     conn = psycopg2.connect(dbname='themilkyway', user='postgres', password='1999')
     cur = conn.cursor()
@@ -3950,7 +3955,7 @@ def create_dummy_data():
                      random.randint(10000, 30000), random.randint(10000, 30000),))
     for i in range(10):
         cur.execute('INSERT INTO stories (sid, uid, status, time, title, summary, story, views, likes, genre) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                    (SID[i], AUTHORS[i], status(i), SUB_TIME[i], TITLES[i], f'Summary{i}', STORIES[i],
+                    (SID[i], AUTHORS[i], status(i), SUB_TIME[i], TITLES[i], SUMMARY[i], STORIES[i],
                      random.randint(10000, 30000), random.randint(10000, 30000), 'Classic,Humor'))
     for i in range(1,6):
         cur.execute('INSERT INTO basic (sno, uid, dob, bio, country, profession, image, private, preferences) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
