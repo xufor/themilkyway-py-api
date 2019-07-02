@@ -40,11 +40,10 @@ class Search(Resource):
 
         elif incoming_content == 'stories':
             discovered_story_objects = StoryModel.find_stories_by_title(incoming_string, incoming_version)
-            filtered_story_objects = StoryModel.filter_story_object_list(discovered_story_objects)
             # Slice the results according to the need
             if incoming_version > 1:
-                filtered_story_objects = filtered_story_objects[(incoming_version - 1) * 15:]
+                discovered_story_objects = discovered_story_objects[(incoming_version - 1)*15:]
             # Return results and if there are no users matching the criteria then return empty list
             # Return empty list if there are no more versions with users matching the criteria
-            return {'results': [StoryModel.generate_story_element_data(story) for story in filtered_story_objects]}
+            return {'results': [StoryModel.generate_story_element_data(story) for story in discovered_story_objects]}
 

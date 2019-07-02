@@ -32,10 +32,11 @@ class Feed(Resource):
         # Set counter to zero
         ctr = 0
         for user in active_user_object.following:
+            # This will set a limit at the maximum no. of stories that can be selected
             if ctr > incoming_version*5:
                 break
             latest_user_story = StoryModel.find_latest_story_by_uid(user.target)
-            if latest_user_story is not None and StoryModel.check_story_status(latest_user_story):
+            if latest_user_story is not None:
                 final_list.append(latest_user_story)
                 ctr += 1
 

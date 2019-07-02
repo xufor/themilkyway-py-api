@@ -51,7 +51,7 @@ class Submit(Resource):
         if not (len(genre_list) <= 3 and set(genre_list).issubset(set(genres))):
             return {'message': INVALID_GENRE}
         # Check word length of various elements
-        if StoryModel.words_counter(story_object.title) > 10:
+        if StoryModel.words_counter(story_object.title) > 7:
             return {'message': TITLE_TOO_LONG}
         if StoryModel.words_counter(story_object.summary) > 80:
             return {'message': SUMMARY_TOO_LONG}

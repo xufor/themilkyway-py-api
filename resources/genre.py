@@ -16,9 +16,8 @@ class Genre(Resource):
     def post(self):
         genre_data = genre_schema.load(request.get_json())
         discovered_stories = StoryModel.find_stories_by_genre(genre_data['genre'], genre_data['version'])
-        filtered_discovered_stories = StoryModel.filter_story_object_list(discovered_stories)
         return {
-            'results': [StoryModel.generate_story_element_data(story) for story in filtered_discovered_stories]
+            'results': [StoryModel.generate_story_element_data(story) for story in discovered_stories]
         }
 
 
