@@ -22,13 +22,10 @@ class Feed(Resource):
         active_user_object = ActiveModel.find_entry_by_uid(get_jwt_identity())
         # The final list to be returned
         final_list = []
-        # This will ensure that there are zero elements in the list initially
-        preferences_list = []
         if active_user_object.basic is not None:
             preferences_list = active_user_object.basic.preferences.split(',')
             for preference in preferences_list:
                 final_list.extend(StoryModel.find_feed_stories_by_genre(preference, incoming_version))
-
         # Set counter to zero
         ctr = 0
         for user in active_user_object.following:
@@ -36,12 +33,8 @@ class Feed(Resource):
             if ctr > incoming_version*5:
                 break
             latest_user_story = StoryModel.find_latest_story_by_uid(user.target)
-            if latest_user_story is not None:
+            if (latest_user_story is not None) and (latest_user_story.sid not in [story.sid for story in final_list]):
                 final_list.append(latest_user_story)
                 ctr += 1
-
-        # Slice the final list to generate only fresh results
-        if incoming_version > 1:
-            final_list = final_list[(incoming_version - 1) * 5 * (len(preferences_list) + 1):]
 
         return {'results': [StoryModel.generate_feed_element_data(story) for story in final_list]}
