@@ -3925,7 +3925,7 @@ STORIES = [
 
 TITLES = ['A Close Encounter of a Different Kind', 'The Fox and the crow', 'The Adventure of the Golden Pince-Nez',
           'Time for flowers', 'A mismatched pair of gloves', 'The Gold Bug', 'Donatien Alphonse Francois de Sade', 'The first Adventures of IDI',
-          'LionBirds', 'I have no idea where this came from or where it\'s going', 'The Little Mermaid']
+          'LionBirds', 'I have no idea where it is', 'The Little Mermaid']
 
 
 def status(i):
