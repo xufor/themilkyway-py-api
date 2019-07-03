@@ -3941,10 +3941,18 @@ IMGS = ['v1561862876/themilkyway/profile_pics/001.jpg',
         'v1561862808/themilkyway/profile_pics/004.jpg',
     ]
 
-SUMMARY = ['A perfect classic!', 'A perfect fiction!', 'A perfect crime story!',
-           'A perfect thriller!', 'A perfect mythology!', 'A perfect love story!',
-           'A perfect anecdote!', 'A perfect suspense!', 'A perfect drama!',
-           'A perfect historical-fiction!']
+SUMMARY = [
+            'The story of Alex a cop in Alabama district who chased a thief for 40 kilometers just to know that?',
+            'The fox and the crow have always been sworn enemies and now that they are set to work together what will happen?',
+            'Golden Prince-Nez is a detective but the case of Robert Willams is the one he will never forget for his entire life.',
+            'Amy has always loved flowers, Daisy in particular but this Christmas these flowers will bring death, sorrow and pain.',
+            'Rolland is a hard worker in a factory. One day one of his gloves gets exchanged with some stranger in train. What will he do?',
+            'The streets of Allahbad were the only playing grounds for Renu. One day she went too far to catch a lazy bug. What was so special about is!',
+            'The world has never been fair with Donatien, follow him on his journey to reach the heights he has always desired.',
+            'The IDI was a group of children who always wanted to solve a mystery. How did they react when they really had one in their reach.',
+            'Sofia lost her wedding ring somewhere on the way to th hospital. Now she is really worried about how she will confront her husband.',
+            'Are mermaids real Mehmed asked Zubair. This story is all about two friends Mehmed and Zubair who always wanted to see a mermaid.'
+        ]
 
 def create_dummy_data():
     conn = psycopg2.connect(dbname='themilkyway', user='postgres', password='1999')
