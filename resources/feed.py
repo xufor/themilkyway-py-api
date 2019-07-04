@@ -13,6 +13,7 @@ feed_schema = FeedSchema()
 
 NO_MORE_FEED = 'Cannot generate more feed.'
 
+
 # An algorithm that filters duplicates and self composed stories
 def return_unique_list(object_list, active_uid):
     filtered_list = []
