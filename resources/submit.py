@@ -51,7 +51,7 @@ class Submit(Resource):
         epoch = datetime.datetime.utcfromtimestamp(0)
         story_time = (latest_story_object.time - epoch).total_seconds()
         if (current_time-story_time) < 86400:
-            return {'message': current_time-story_time}, 400
+            return {'message': NOT_BEFORE_A_DAY}, 400
         # Loaded incoming data into story
         story_object = story_schema.load(request.get_json(), db.session)
         # Check if the the genres is valid or not
