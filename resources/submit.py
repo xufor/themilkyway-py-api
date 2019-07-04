@@ -33,9 +33,9 @@ STORY_SUCCESSFULLY_SUBMITTED = 'Story successfully submitted.'
 STORY_SUCCESSFULLY_UPDATED = 'Story successfully updated.'
 INVALID_GENRE = 'The provided genres are not valid.'
 INVALID_REQUEST = 'Invalid request.'
-SUMMARY_TOO_LONG = 'Summary cannot be greater than length of 80 words.'
-STORY_TOO_LONG = 'Story cannot be greater than length of 10000 words.'
-TITLE_TOO_LONG = 'Title cannot be greater than length of 7 words.'
+SUMMARY_TOO_LONG = 'Summary of and below 80 words is allowed.'
+STORY_TOO_LONG = 'Story of and below 10000 words is allowed.'
+TITLE_TOO_LONG = 'Title of and below 7 words is allowed.'
 OPERATION_UNSUCCESSFUL = 'Operation unsuccessful.'
 OPERATION_SUCCESSFUL = 'Operation successful.'
 NOT_BEFORE_A_DAY = 'Cannot submit next story before 24 hours.'
@@ -62,9 +62,9 @@ class Submit(Resource):
         # Check word length of various elements
         if StoryModel.words_counter(story_object.title) > 7:
             return {'message': TITLE_TOO_LONG}, 400
-        if StoryModel.words_counter(story_object.summary) > 80:
+        if StoryModel.words_counter(story_object.summary) > 10:
             return {'message': SUMMARY_TOO_LONG}, 400
-        if StoryModel.words_counter(story_object.story) > 10000:
+        if StoryModel.words_counter(story_object.story) > 5:
             return {'message': STORY_TOO_LONG}, 400
         # Adding time, uid and sid fields to story object
         story_object.time = time.asctime(time.gmtime(time.time()))
