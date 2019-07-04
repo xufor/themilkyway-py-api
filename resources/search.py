@@ -12,6 +12,7 @@ from models.stories import StoryModel
 search_schema = SearchSchema()
 
 NO_IMAGE_AVAILABLE = 'No Image available.'
+NO_MORE_SEARCH_DATA = 'No more search data available.'
 
 
 class Search(Resource):
@@ -36,7 +37,10 @@ class Search(Resource):
                 active_user_objects = active_user_objects[(incoming_version-1)*15:]
             # Return results and if there are no users matching the criteria then return empty list
             # Return empty list if there are no more versions with users matching the criteria
-            return {'results': ActiveModel.generate_search_data(active_user_objects)}
+            if len(active_user_objects != 0):
+                return {'results': ActiveModel.generate_search_data(active_user_objects)}
+            else:
+                return {'message': NO_MORE_SEARCH_DATA}, 400
 
         elif incoming_content == 'stories':
             discovered_story_objects = StoryModel.find_stories_by_title(incoming_string, incoming_version)
@@ -45,5 +49,7 @@ class Search(Resource):
                 discovered_story_objects = discovered_story_objects[(incoming_version - 1)*15:]
             # Return results and if there are no users matching the criteria then return empty list
             # Return empty list if there are no more versions with users matching the criteria
-            return {'results': [StoryModel.generate_story_element_data(story) for story in discovered_story_objects]}
-
+            if len(discovered_story_objects != 0):
+                return {'results': [StoryModel.generate_story_element_data(story) for story in discovered_story_objects]}
+            else:
+                return {'message': NO_MORE_SEARCH_DATA}, 400
