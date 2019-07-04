@@ -50,7 +50,7 @@ class Like(Resource):
             return {'message': ALREADY_LIKED}, 400
         # If valid then fill the object fields with remaining data
         like_object.source = current_user
-        like_object.time = time.asctime(time.localtime(time.time()))
+        like_object.time = time.asctime(time.gmtime(time.time()))
         # Check for write errors and return appropriate messages
         if like_object.create_entry() == ERROR_WRITING_LIKE_TABLE:
             return {'message': LIKE_UNSUCCESSFUL}, 500

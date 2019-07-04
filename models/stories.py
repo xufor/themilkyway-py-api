@@ -73,6 +73,10 @@ class StoryModel(db.Model):
         return cls.query.filter(and_(cls.uid == query_uid, cls.status == 'approved')).order_by(cls.time.desc()).first()
 
     @classmethod
+    def force_find_latest_story_by_uid(cls, query_uid):
+        return cls.query.filter(cls.uid == query_uid).order_by(cls.time.desc()).first()
+
+    @classmethod
     def check_story_status(cls, story_object):
         return story_object.status == 'approved'
 

@@ -47,7 +47,7 @@ class SignUp(Resource):
             inactive_user_object.code = email_delivery_response['code']
 
             # Adding the time field using the inbuilt python module
-            inactive_user_object.time = time.asctime(time.localtime(time.time()))
+            inactive_user_object.time = time.asctime(time.gmtime(time.time()))
 
             # Creating inactive user and checking if the operation was
             # successful or not.

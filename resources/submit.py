@@ -1,4 +1,5 @@
 import time
+import datetime
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import (
@@ -37,28 +38,36 @@ STORY_TOO_LONG = 'Story cannot be greater than length of 10000 words.'
 TITLE_TOO_LONG = 'Title cannot be greater than length of 10 words.'
 OPERATION_UNSUCCESSFUL = 'Operation unsuccessful.'
 OPERATION_SUCCESSFUL = 'Operation successful.'
+NOT_BEFORE_A_DAY = 'Cannot submit next story before 24 hours.'
 
 
 class Submit(Resource):
     # For submitting a story
     @jwt_required
     def post(self):
+        # Get the latest story
+        latest_story_object = StoryModel.force_find_latest_story_by_uid(get_jwt_identity())
+        current_time = time.time()
+        epoch = datetime.datetime.utcfromtimestamp(0)
+        story_time = (latest_story_object.time - epoch).total_seconds()
+        if (current_time-story_time) < 86400:
+            return {'message': current_time-story_time}, 400
         # Loaded incoming data into story
         story_object = story_schema.load(request.get_json(), db.session)
         # Check if the the genres is valid or not
         # Accepts 3 genres only
         genre_list = story_object.genre.split(',')
         if not (len(genre_list) <= 3 and set(genre_list).issubset(set(genres))):
-            return {'message': INVALID_GENRE}
+            return {'message': INVALID_GENRE}, 400
         # Check word length of various elements
         if StoryModel.words_counter(story_object.title) > 7:
-            return {'message': TITLE_TOO_LONG}
+            return {'message': TITLE_TOO_LONG}, 400
         if StoryModel.words_counter(story_object.summary) > 80:
-            return {'message': SUMMARY_TOO_LONG}
+            return {'message': SUMMARY_TOO_LONG}, 400
         if StoryModel.words_counter(story_object.story) > 10000:
-            return {'message': STORY_TOO_LONG}
+            return {'message': STORY_TOO_LONG}, 400
         # Adding time, uid and sid fields to story object
-        story_object.time = time.asctime(time.localtime(time.time()))
+        story_object.time = time.asctime(time.gmtime(time.time()))
         story_object.uid = get_jwt_identity()
         story_object.sid = StoryModel.generate_fresh_sid()
         story_object.status = 'unapproved'
@@ -80,6 +89,18 @@ class Submit(Resource):
         if (discovered_story is None) or (not StoryModel.check_story_status(discovered_story)):
             return {'message': INVALID_REQUEST}, 400
         else:
+            # Check the genre data
+            genre_list = story_data['genre'].split(',')
+            if not (len(genre_list) <= 3 and set(genre_list).issubset(set(genres))):
+                return {'message': INVALID_GENRE}, 400
+            # Check word length of various elements
+            if StoryModel.words_counter(story_data['title']) > 7:
+                return {'message': TITLE_TOO_LONG}, 400
+            if StoryModel.words_counter(story_data['summary']) > 80:
+                return {'message': SUMMARY_TOO_LONG}, 400
+            if StoryModel.words_counter(story_data['story']) > 10000:
+                return {'message': STORY_TOO_LONG}, 400
+            # Now update the fields of the story
             discovered_story.story = story_data['story']
             discovered_story.summary = story_data['summary']
             discovered_story.title = story_data['title']

@@ -48,7 +48,7 @@ class Confirm(Resource):
             # Creating an active schema object using available inactive data
             active_user_object = active_schema.load(inactive_user_data, db.session)
             # Adding the time field using the inbuilt time module
-            active_user_object.time = time.asctime(time.localtime(time.time()))
+            active_user_object.time = time.asctime(time.gmtime(time.time()))
             # Adding the uid field using inbuilt uuid module
             active_user_object.uid = ActiveModel.generate_fresh_uid()
             # Setting likes and views to zero

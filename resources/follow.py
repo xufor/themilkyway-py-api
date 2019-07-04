@@ -48,7 +48,7 @@ class Follow(Resource):
             return {'message': ALREADY_FOLLOWING}
         # Add the additional data and write into database
         follow_object.source = current_user
-        follow_object.time = time.asctime(time.localtime(time.time()))
+        follow_object.time = time.asctime(time.gmtime(time.time()))
         if follow_object.create_entry() == ERROR_WRITING_FOLLOW_TABLE:
             return {'message': FOLLOW_UNSUCCESSFUL}, 500
         return {'message': FOLLOW_SUCCESSFUL}, 202

@@ -39,7 +39,7 @@ class Read(Resource):
         # Check if already viewed or not
         if view_object.target not in [view.target for view in active_user_object.viewed]:
             view_object.source = current_user
-            view_object.time = time.asctime(time.localtime(time.time()))
+            view_object.time = time.asctime(time.gmtime(time.time()))
             if view_object.create_entry() == ERROR_WRITING_VIEWS_TABLE:
                 return {'message': VIEW_UNSUCCESSFUL}, 500
             # Add the number of views by one
