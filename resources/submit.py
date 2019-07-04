@@ -62,9 +62,9 @@ class Submit(Resource):
         # Check word length of various elements
         if StoryModel.words_counter(story_object.title) > 7:
             return {'message': TITLE_TOO_LONG}, 400
-        if StoryModel.words_counter(story_object.summary) > 10:
+        if StoryModel.words_counter(story_object.summary) > 80:
             return {'message': SUMMARY_TOO_LONG}, 400
-        if StoryModel.words_counter(story_object.story) > 5:
+        if StoryModel.words_counter(story_object.story) > 10000:
             return {'message': STORY_TOO_LONG}, 400
         # Adding time, uid and sid fields to story object
         story_object.time = time.asctime(time.gmtime(time.time()))
