@@ -49,13 +49,10 @@ class Feed(Resource):
                 follow_based_list.append(latest_user_story)
                 ctr += 1
         # Slice all the elementary lists
-        if incoming_version > 1:
-            # For genre_based_list
-            for sub_list in genre_based_list:
-                sub_list = sub_list[(incoming_version-1)*5:]
-                final_list.extend(sub_list)
-            # For follow_based_list
-            final_list.extend(follow_based_list[(incoming_version-1)*5:])
+        for sub_list in genre_based_list:
+            sub_list = sub_list[(incoming_version-1)*5:]
+            final_list.extend(sub_list)
+        final_list.extend(follow_based_list[(incoming_version-1)*5:])
         # Now filter the list for duplicated and self composed stories
         final_list = return_unique_list(final_list, active_user_object.uid)
         # Return the results or send an error if final list is empty
