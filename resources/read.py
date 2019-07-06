@@ -33,7 +33,7 @@ class Read(Resource):
         # Check if the target valid or not
         discovered_story = StoryModel.find_story_by_sid(view_object.target)
         if discovered_story is None or discovered_story.status == 'unapproved':
-            return {'message': INVALID_REQUEST}
+            return {'message': INVALID_REQUEST}, 400
         # Make an object of current user
         active_user_object = ActiveModel.find_entry_by_uid(current_user)
         # Check if already viewed or not

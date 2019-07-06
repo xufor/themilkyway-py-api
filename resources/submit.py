@@ -76,7 +76,7 @@ class Submit(Resource):
         # Creating a new entry in story table and checking for success
         if story_object.create_story() == ERROR_WRITING_STORY_TABLE:
             return {'message': ERROR_SUBMITTING_STORY}, 500
-        return {'message': STORY_SUCCESSFULLY_SUBMITTED}, 201
+        return {'message': STORY_SUCCESSFULLY_SUBMITTED}, 200
 
     # For editing a story
     @jwt_required
