@@ -1,2 +1,2 @@
-# themilkyway-api-dev
-Development API
+# Flask Application Backend
+
