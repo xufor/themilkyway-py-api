@@ -83,14 +83,16 @@ class ActiveModel(db.Model):
         return fresh_uid
 
     @classmethod
-    def generate_search_data(cls, active_user_list):
+    def generate_search_data(cls, active_user_list, current_user):
+        active_user_object = cls.find_entry_by_uid(current_user)
         return [
             {
                 'uid': active_user.uid,
                 'name': active_user.name,
                 'image': active_user.basic.image
                 if (active_user.basic and active_user.basic.image != 'no-image')
-                else NO_IMAGE_AVAILABLE
+                else NO_IMAGE_AVAILABLE,
+                'already_following': active_user.uid in [following.target for following in active_user_object.following]
             } for active_user in active_user_list
         ]
 

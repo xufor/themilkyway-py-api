@@ -28,17 +28,13 @@ class Search(Resource):
 
         if incoming_content == 'authors':
             active_user_objects = ActiveModel.find_entry_by_name(incoming_string, incoming_version, current_user)
-            # Remove the result which is same as the requesting user
-            for user in active_user_objects:
-                if user.uid == current_user:
-                    active_user_objects.remove(user)
             # Slice the results according to the need
             if incoming_version > 1:
                 active_user_objects = active_user_objects[(incoming_version-1)*15:]
             # Return results and if there are no users matching the criteria then return empty list
             # Return empty list if there are no more versions with users matching the criteria
             if len(active_user_objects) != 0:
-                return {'results': ActiveModel.generate_search_data(active_user_objects)}
+                return {'results': ActiveModel.generate_search_data(active_user_objects, current_user)}
             else:
                 return {'message': NO_MORE_SEARCH_DATA}, 400
 
