@@ -1,5 +1,6 @@
 import uuid
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import and_
 
 from db import db
 from dummy import UID
@@ -41,8 +42,8 @@ class ActiveModel(db.Model):
         return cls.query.filter_by(email=query_email).first()
 
     @classmethod
-    def find_entry_by_name(cls, query_name, version):
-        return cls.query.filter(cls.name.like(f'%{query_name}%')).limit(version*15).all()
+    def find_entry_by_name(cls, query_name, version, current_user):
+        return cls.query.filter(and_(cls.name.ilike(f'%{query_name}%'), cls.uid != current_user)).limit(version*15).all()
 
     @classmethod
     def find_entry_by_uid(cls, query_uid):

@@ -65,7 +65,7 @@ class StoryModel(db.Model):
 
     @classmethod
     def find_stories_by_title(cls, query_title, version):
-        return cls.query.filter(and_(cls.title.like(f'%{query_title}%'), cls.status == 'approved'))\
+        return cls.query.filter(and_(cls.title.ilike(f'%{query_title}%'), cls.status == 'approved'))\
             .limit(version*15).all()
 
     @classmethod

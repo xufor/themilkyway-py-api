@@ -16,7 +16,7 @@ from models.likes import (
 
 like_schema = LikeSchema()
 
-CANNOT_LIKE_OWN_STORY = 'You cannot like your story.'
+CANNOT_LIKE_OWN_STORY = 'You cannot like your own story.'
 CANNOT_UNLIKE_OWN_STORY = 'You cannot remove like from your own story.'
 LIKE_SUCCESSFUL = 'Like successful.'
 LIKE_UNSUCCESSFUL = 'Like unsuccessful.'
