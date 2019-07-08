@@ -49,7 +49,7 @@ class Search(Resource):
                 discovered_story_objects = discovered_story_objects[(incoming_version - 1)*15:]
             # Return results and if there are no users matching the criteria then return empty list
             # Return empty list if there are no more versions with users matching the criteria
-            if len(discovered_story_objects != 0):
+            if len(discovered_story_objects) != 0:
                 return {'results': [StoryModel.generate_story_element_data(story) for story in discovered_story_objects]}
             else:
                 return {'message': NO_MORE_SEARCH_DATA}, 400
