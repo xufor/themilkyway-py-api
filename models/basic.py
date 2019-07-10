@@ -30,7 +30,13 @@ class BasicModel(db.Model):
                 'image': NO_IMAGE_AVAILABLE
             }
         elif active_user_object.basic.private:
-            return {'message': IS_PRIVATE}
+            return {
+                'message': IS_PRIVATE,
+                'name': active_user_object.name,
+                'image': active_user_object.basic.image
+                if active_user_object.basic.image != 'no-image'
+                else NO_IMAGE_AVAILABLE
+            }
         return {
             'bio': active_user_object.basic.bio,
             'country': active_user_object.basic.country,
