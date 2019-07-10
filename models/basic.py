@@ -17,7 +17,7 @@ class BasicModel(db.Model):
     bio = db.Column(db.VARCHAR(500), nullable=False)
     country = db.Column(db.VARCHAR(60), nullable=False)
     profession = db.Column(db.VARCHAR(20), nullable=False)
-    image = db.Column(db.VARCHAR(50), nullable=False)
+    image = db.Column(db.VARCHAR(100), nullable=False)
     private = db.Column(db.BOOLEAN, nullable=False)
     preferences = db.Column(db.VARCHAR(100), nullable=False)
 
