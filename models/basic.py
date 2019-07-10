@@ -37,7 +37,7 @@ class BasicModel(db.Model):
             'email': active_user_object.basic.strong.email,
             'profession': active_user_object.basic.profession,
             'dob': str(active_user_object.basic.dob),
-            'preferences': active_user_object.preferences,
+            'preferences': active_user_object.basic.preferences,
             'image': active_user_object.basic.image
             if active_user_object.basic.image != 'no-image'
             else NO_IMAGE_AVAILABLE,
@@ -57,7 +57,7 @@ class BasicModel(db.Model):
             'country': active_user_object.basic.country,
             'email': active_user_object.email,
             'name': active_user_object.name,
-            'preferences': active_user_object.preferences,
+            'preferences': active_user_object.basic.preferences,
             'image': active_user_object.basic.image
             if active_user_object.basic.image != 'no-image'
             else NO_IMAGE_AVAILABLE,
