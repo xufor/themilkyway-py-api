@@ -41,7 +41,7 @@ OPERATION_SUCCESSFUL = 'Operation successful.'
 NOT_BEFORE_A_DAY = 'Cannot submit next story before 24 hours.'
 
 
-class Submit(Resource):
+class Story(Resource):
     # For submitting a story
     @jwt_required
     def post(self):

@@ -14,7 +14,7 @@ from resources.signup import SignUp
 from resources.confirm import Confirm
 from resources.signin import SignIn
 from resources.signout import SignOut
-from resources.submit import Submit
+from resources.story import Story
 from resources.approve import Approve
 from resources.reject import Reject
 from resources.dummy import Dummy
@@ -98,7 +98,7 @@ api.add_resource(SignUp, '/signup')
 api.add_resource(SignIn, '/signin')
 api.add_resource(SignOut, '/signout')
 api.add_resource(Confirm, '/confirm/<string:code>')
-api.add_resource(Submit, '/submit')
+api.add_resource(Story, '/story')
 api.add_resource(Approve, '/approve')
 api.add_resource(Reject, '/reject')
 api.add_resource(Dummy, '/dummy')
