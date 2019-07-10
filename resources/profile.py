@@ -16,7 +16,6 @@ from models.basic import (
 )
 from models.follow import FollowModel
 from models.likes import LikesModel
-from resources.elite import NO_IMAGE_AVAILABLE
 
 
 basic_schema = BasicSchema()
