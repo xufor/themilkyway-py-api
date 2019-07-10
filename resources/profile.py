@@ -43,7 +43,7 @@ class Profile(Resource):
         fresh_basic_object = basic_schema.load(request.get_json())
         # Validate the preferences
         preference_list = fresh_basic_object.preferences.split(',')
-        if not(len(preference_list) == 3 and set(preference_list).issubset(set(genres))):
+        if not(len(preference_list) <= 3 and set(preference_list).issubset(set(genres))):
             return {'message': INVALID_PREFERENCES}
         # Creating an for the requesting active user
         active_user_object = ActiveModel.find_entry_by_uid(current_user)
