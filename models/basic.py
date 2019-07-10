@@ -37,6 +37,7 @@ class BasicModel(db.Model):
             'email': active_user_object.basic.strong.email,
             'profession': active_user_object.basic.profession,
             'dob': str(active_user_object.basic.dob),
+            'private': active_user_object.basic.private,
             'preferences': active_user_object.basic.preferences,
             'image': active_user_object.basic.image
             if active_user_object.basic.image != 'no-image'
@@ -57,6 +58,7 @@ class BasicModel(db.Model):
             'country': active_user_object.basic.country,
             'email': active_user_object.email,
             'name': active_user_object.name,
+            'private': active_user_object.basic.private,
             'preferences': active_user_object.basic.preferences,
             'image': active_user_object.basic.image
             if active_user_object.basic.image != 'no-image'
