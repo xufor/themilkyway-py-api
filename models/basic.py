@@ -24,7 +24,11 @@ class BasicModel(db.Model):
     @classmethod
     def generate_basic_profile_data(cls, active_user_object):
         if active_user_object.basic is None:
-            return {'message': 'No data'}
+            return {
+                'message': 'No data',
+                'name': active_user_object.name,
+                'image': NO_IMAGE_AVAILABLE
+            }
         elif active_user_object.basic.private:
             return {'message': IS_PRIVATE}
         return {
@@ -42,7 +46,11 @@ class BasicModel(db.Model):
     @classmethod
     def force_generate_basic_profile_data(cls, active_user_object):
         if active_user_object.basic is None:
-            return {'message': 'No data'}
+            return {
+                'message': 'No data',
+                'name': active_user_object.name,
+                'image': NO_IMAGE_AVAILABLE
+            }
         return {
             'bio': active_user_object.basic.bio,
             'country': active_user_object.basic.country,
