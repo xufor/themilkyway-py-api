@@ -15,7 +15,7 @@ class BasicModel(db.Model):
     uid = db.Column(db.VARCHAR(6), db.ForeignKey('active.uid'), nullable=False)
     dob = db.Column(db.DATE, nullable=False)
     bio = db.Column(db.VARCHAR(500), nullable=False)
-    country = db.Column(db.VARCHAR(60), nullable=False)
+    country = db.Column(db.VARCHAR(20), nullable=False)
     profession = db.Column(db.VARCHAR(20), nullable=False)
     image = db.Column(db.VARCHAR(100), nullable=False)
     private = db.Column(db.BOOLEAN, nullable=False)
