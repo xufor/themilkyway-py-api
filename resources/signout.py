@@ -34,7 +34,7 @@ class SignOut(Resource):
         srt_blacklist_object.time = current_time
         # Adding multiple blacklisted jti to database
         if sat_blacklist_object.blacklist_token() == ERROR_WRITING_BLACKLIST_TABLE:
-            return {'message': SIGN_OUT_UNSUCCESSFUL}
+            return {'message': SIGN_OUT_UNSUCCESSFUL}, 500
         else:
             srt_blacklist_object.blacklist_token()
         return {'message': SIGN_OUT_SUCCESSFUL}
