@@ -1,10 +1,18 @@
 import uuid
 from sqlalchemy.exc import SQLAlchemyError
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 from db import db
 
 ERROR_WRITING_INACTIVE_TABLE = 'Error writing inactive table.'
 ERROR_DELETING_INACTIVE_TABLE = 'Error deleting from inactive table.'
+
+message = Mail(
+    from_email='em7714.themilkyway.tk',
+    to_emails='to@example.com',
+    subject='Sending with Twilio SendGrid is Fun',
+    html_content='<strong>and easy to do anywhere, even with Python</strong>')
 
 
 class InactiveModel(db.Model):

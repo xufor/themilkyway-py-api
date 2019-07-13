@@ -17,8 +17,8 @@ flask-jwt-extended = "*"
 flask-marshmallow = "*"
 psycopg2 = "*"
 bcrypt = "==3.1.6"
-cors = "*"
 flask-cors = "*"
+sendgrid = "*"
 
 [requires]
 python_version = "3.7"
