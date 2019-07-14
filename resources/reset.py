@@ -22,7 +22,7 @@ class Reset(Resource):
         if discovered_active_user is None:
             return {'message': 'No such account exists.'}, 400
         else:
-            code = create_access_token(discovered_active_user.uid, False, datetime.timedelta(seconds=5))
+            code = create_access_token(discovered_active_user.uid, False, datetime.timedelta(minutes=5))
 
             message = {
                 'personalizations': [
