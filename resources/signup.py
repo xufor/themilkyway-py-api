@@ -29,7 +29,7 @@ class SignUp(Resource):
             return {'message': ACTIVE_USER_FOUND}, 400
 
         if InactiveModel.find_entry_by_email(inactive_user_object.email) is None:
-            email_delivery_response = InactiveModel.send_email(inactive_user_object.email)
+            email_delivery_response = InactiveModel.send_email(inactive_user_object)
         else:
             return {'message': INACTIVE_USER_FOUND}, 400
 

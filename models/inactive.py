@@ -1,18 +1,11 @@
 import uuid
 from sqlalchemy.exc import SQLAlchemyError
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 
 from db import db
 
 ERROR_WRITING_INACTIVE_TABLE = 'Error writing inactive table.'
 ERROR_DELETING_INACTIVE_TABLE = 'Error deleting from inactive table.'
-
-message = Mail(
-    from_email='em7714.themilkyway.tk',
-    to_emails='to@example.com',
-    subject='Sending with Twilio SendGrid is Fun',
-    html_content='<strong>and easy to do anywhere, even with Python</strong>')
 
 
 class InactiveModel(db.Model):
@@ -31,11 +24,36 @@ class InactiveModel(db.Model):
         return cls.query.get(query_email)
 
     @classmethod
-    def send_email(cls, recipient):
+    def send_email(cls, inactive_user_object):
         verification_code = cls.generate_fresh_code()
-        response_code = 200
-        if response_code == 200:
-            return {'email': recipient, 'code': verification_code}
+
+        message = {
+            'personalizations': [
+                {
+                    'to': [
+                        {
+                            'email': inactive_user_object.email
+                        }
+                    ],
+                    'dynamic_template_data': {
+                        'data': {
+                            'link': f'http://localhost:5000/confirm/{verification_code}',
+                            'name': inactive_user_object.name.split(0)
+                        }
+                    }
+                }
+            ],
+            'from': {
+                'email': 'admin@themilkyway.tk'
+            },
+            'template_id': 'd-7c633f38aec249e7817c026f3a20a321'
+        }
+
+        sg = SendGridAPIClient('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')
+        response = sg.send(message)
+
+        if response.status_code == 202:
+            return {'code': verification_code}
 
     @classmethod
     def generate_random_code(cls):

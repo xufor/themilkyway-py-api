@@ -2,6 +2,7 @@ import datetime
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token
+from sendgrid import SendGridAPIClient
 
 from schemas.reset import ResetSchema
 from models.active import ActiveModel
@@ -22,7 +23,31 @@ class Reset(Resource):
             return {'message': 'No such account exists.'}, 400
         else:
             code = create_access_token(discovered_active_user.uid, False, datetime.timedelta(seconds=5))
-            return {
-                'message': OP_SUCCESSFUL,
-                'link': f'http://localhost:3000/update/{code}'
+
+            message = {
+                'personalizations': [
+                    {
+                        'to': [
+                            {
+                                'email': discovered_active_user.email
+                            }
+                        ],
+                        'dynamic_template_data': {
+                            'data': {
+                                'link': f'https://www.themilkyway.tk/update/{code}',
+                                'name': discovered_active_user.name.split()[0]
+                            }
+                        }
+                    }
+                ],
+                'from': {
+                    'email': 'admin@themilkyway.tk'
+                },
+                'template_id': 'd-536ca53dd0c4464f96e2333f605d0d16'
             }
+
+            sg = SendGridAPIClient('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')
+            response = sg.send(message)
+
+            if response.status_code == 202:
+                return {'message': OP_SUCCESSFUL}
