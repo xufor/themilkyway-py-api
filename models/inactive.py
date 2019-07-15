@@ -38,7 +38,7 @@ class InactiveModel(db.Model):
                     'dynamic_template_data': {
                         'data': {
                             'link': f'http://localhost:5000/confirm/{verification_code}',
-                            'name': inactive_user_object.name.split(0)
+                            'name': inactive_user_object.name.split()[0]
                         }
                     }
                 }
