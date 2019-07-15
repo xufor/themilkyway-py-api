@@ -61,10 +61,7 @@ class SignUp(Resource):
 
         # This return value is temporarily equal to verification code
         # and needs to be replaced later.
-        return {
-            'confirmation_link': 'http://127.0.0.1:5000/confirm/{}'.format(email_delivery_response['code']),
-            'message': 'Operation successful.'
-        }
+        return {'message': 'Operation successful.'}
 
 
 
