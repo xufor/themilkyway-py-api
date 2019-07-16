@@ -1,9 +1,9 @@
+import os
 import uuid
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import and_
 
 from db import db
-from dummy import UID
 from models.stories import StoryModel  # Do not remove
 from models.follow import FollowModel  # Do not remove
 from models.likes import LikesModel      # Do not remove
@@ -11,6 +11,7 @@ from models.views import ViewsModel    # Do not remove
 from models.basic import BasicModel    # Do not remove
 
 
+ADMIN_UID = os.getenv('ADMIN_USER', '26e1a2')
 ERROR_WRITING_ACTIVE_TABLE = 'Error writing active table.'
 NO_IMAGE_AVAILABLE = 'No Image available.'
 
@@ -43,7 +44,8 @@ class ActiveModel(db.Model):
 
     @classmethod
     def find_entry_by_name(cls, query_name, version, current_user):
-        return cls.query.filter(and_(cls.name.ilike(f'%{query_name}%'), cls.uid != current_user)).limit(version*15).all()
+        return cls.query.filter(and_(cls.name.ilike(f'%{query_name}%'), cls.uid != current_user, cls.uid != ADMIN_UID))\
+            .limit(version*15).all()
 
     @classmethod
     def find_entry_by_uid(cls, query_uid):
@@ -55,7 +57,7 @@ class ActiveModel(db.Model):
 
     @classmethod
     def generate_elite_users(cls):
-        return cls.query.filter(cls.uid != UID[0]).order_by(cls.likes.desc()).limit(15).all()
+        return cls.query.filter(cls.uid != ADMIN_UID).order_by(cls.likes.desc()).limit(15).all()
 
     @classmethod
     def add_views_by_one(cls, query_uid):

@@ -1,3 +1,4 @@
+import os
 import datetime
 from flask import request
 from flask_restful import Resource
@@ -41,12 +42,13 @@ class Reset(Resource):
                     }
                 ],
                 'from': {
-                    'email': 'admin@themilkyway.tk'
+                    'email': 'xufor.developer.official@gmail.com',
+                    'name': 'Password Reset'
                 },
                 'template_id': 'd-536ca53dd0c4464f96e2333f605d0d16'
             }
 
-            sg = SendGridAPIClient('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')
+            sg = SendGridAPIClient(os.getenv('EMAIL_API_KEY'), 'NO_API_KEY')
             response = sg.send(message)
 
             if response.status_code == 202:

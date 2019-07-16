@@ -1,3 +1,4 @@
+import os
 import uuid
 from sqlalchemy.exc import SQLAlchemyError
 from sendgrid import SendGridAPIClient
@@ -44,12 +45,13 @@ class InactiveModel(db.Model):
                 }
             ],
             'from': {
-                'email': 'admin@themilkyway.tk'
+                'email': 'xufor.developer.official@gmail.com',
+                'name': 'New Account Confirmation'
             },
             'template_id': 'd-7c633f38aec249e7817c026f3a20a321'
         }
 
-        sg = SendGridAPIClient('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')
+        sg = SendGridAPIClient(os.getenv('EMAIL_API_KEY'), 'NO_API_KEY')
         response = sg.send(message)
 
         if response.status_code == 202:

@@ -1,3 +1,4 @@
+import os
 import datetime
 from flask import (
     Flask,
@@ -17,9 +18,7 @@ from resources.signout import SignOut
 from resources.story import Story
 from resources.approve import Approve
 from resources.reject import Reject
-from resources.dummy import Dummy
 from resources.refresh import Refresh
-from resources.drop import Drop
 from resources.test import Test
 from resources.follow import Follow
 from resources.like import Like
@@ -32,13 +31,13 @@ from resources.feed import Feed
 from resources.change import Change
 from resources.reset import Reset
 from models.blacklist import BlacklistModel
-from dummy import UID
 
+ADMIN_UID = os.getenv('ADMIN_USER', '26e1a2')
 TOKEN_REVOKED = 'The token has been revoked. Please login again.'
 TOKEN_EXPIRED = 'The token has expired. Please refresh it.'
 TOKEN_INVALID = 'The token is invalid.'
 
-DB_URL = 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway'
+DB_URL = os.getenv('DB_URL', 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway')
 
 app = Flask(__name__)
 CORS(app)
@@ -50,7 +49,7 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES'] = datetime.timedelta(days=90)
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 
-app.secret_key = 'u83bdd537e9g0yt7yvc8cm5ex9c8n9v2a'
+app.secret_key = os.getenv('APP_SECRET_KEY', 'u83bdd537e9g0yt7yvc8cm5ex9c8n9v2a')
 
 api = Api(app)
 
@@ -81,7 +80,7 @@ def when_token_is_invalid(reason):
 
 @jwt.user_claims_loader
 def add_claims_to_jwt(identity):
-    if identity == UID[0]:
+    if identity == ADMIN_UID:
         return {'is_admin': True}
     return {'is_admin': False}
 
@@ -103,9 +102,7 @@ api.add_resource(Confirm, '/confirm/<string:code>')
 api.add_resource(Story, '/story')
 api.add_resource(Approve, '/approve')
 api.add_resource(Reject, '/reject')
-api.add_resource(Dummy, '/dummy')
 api.add_resource(Refresh, '/refresh')
-api.add_resource(Drop, '/drop')
 api.add_resource(Test, '/')
 api.add_resource(Follow, '/follow')
 api.add_resource(Like, '/like')

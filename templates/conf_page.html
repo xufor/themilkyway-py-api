@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>The Milky Way</title>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #7F7FD5;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            font-family: 'Pacifico', cursive;
+            font-size: 5rem;
+            text-align: center;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 0;
+        }
+
+        p {
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
-    {{ message }}
+    <p id='msf'>{{ message }}</p>
 </body>
 </html>
