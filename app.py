@@ -7,7 +7,6 @@ from flask import (
 from flask_restful import Api
 from marshmallow import ValidationError
 from flask_jwt_extended import JWTManager
-from flask_cors import CORS
 
 from db import db
 from ma import ma
@@ -40,7 +39,7 @@ TOKEN_INVALID = 'The token is invalid.'
 DB_URL = os.getenv('DB_URL', 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway')
 
 app = Flask(__name__)
-CORS(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
