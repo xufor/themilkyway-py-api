@@ -45,7 +45,7 @@ class InactiveModel(db.Model):
                 }
             ],
             'from': {
-                'email': 'xufor.developer.official@gmail.com',
+                'email': 'tmw.mission.control@gmail.com',
                 'name': 'New Account Confirmation'
             },
             'template_id': 'd-7c633f38aec249e7817c026f3a20a321'

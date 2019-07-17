@@ -42,7 +42,7 @@ class Reset(Resource):
                     }
                 ],
                 'from': {
-                    'email': 'xufor.developer.official@gmail.com',
+                    'email': 'tmw.mission.control@gmail.com',
                     'name': 'Password Reset'
                 },
                 'template_id': 'd-536ca53dd0c4464f96e2333f605d0d16'
