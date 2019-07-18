@@ -25,7 +25,7 @@ confirm_schema = ConfirmSchema()
 
 INVALID_LINK = 'The provided link is invalid.'
 CONFIRMATION_FAILED = 'User confirmation failed.'
-CONFIRMATION_SUCCESSFUL = 'Your account is has been activated. You can login now!'
+CONFIRMATION_SUCCESSFUL = 'Your account has been activated. You can login now!'
 SERVER_ERROR = 'Internal server error.'
 
 
