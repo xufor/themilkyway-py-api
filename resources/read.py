@@ -2,7 +2,7 @@ import time
 from flask import request
 from flask_jwt_extended import (
     get_jwt_identity,
-    jwt_required
+    jwt_optional
 )
 from flask_restful import Resource
 
@@ -24,7 +24,7 @@ INVALID_REQUEST = 'Invalid request.'
 
 class Read(Resource):
     # For following another user
-    @jwt_required
+    @jwt_optional
     def post(self):
         # Extract user who tends to like from jwt
         current_user = get_jwt_identity()
@@ -34,17 +34,18 @@ class Read(Resource):
         discovered_story = StoryModel.find_story_by_sid(view_object.target)
         if discovered_story is None or discovered_story.status == 'unapproved':
             return {'message': INVALID_REQUEST}, 400
-        # Make an object of current user
-        active_user_object = ActiveModel.find_entry_by_uid(current_user)
-        # Check if already viewed or not
-        if view_object.target not in [view.target for view in active_user_object.viewed]:
-            view_object.source = current_user
-            view_object.time = time.asctime(time.gmtime(time.time()))
-            if view_object.create_entry() == ERROR_WRITING_VIEWS_TABLE:
-                return {'message': VIEW_UNSUCCESSFUL}, 500
-            # Add the number of views by one
-            StoryModel.add_views_by_one(view_object.target)
-            ActiveModel.add_views_by_one(discovered_story.author.uid)
+        if current_user is not None:
+            # Make an object of current user
+            active_user_object = ActiveModel.find_entry_by_uid(current_user)
+            # Check if already viewed or not
+            if view_object.target not in [view.target for view in active_user_object.viewed]:
+                view_object.source = current_user
+                view_object.time = time.asctime(time.gmtime(time.time()))
+                if view_object.create_entry() == ERROR_WRITING_VIEWS_TABLE:
+                    return {'message': VIEW_UNSUCCESSFUL}, 500
+                # Add the number of views by one
+                StoryModel.add_views_by_one(view_object.target)
+                ActiveModel.add_views_by_one(discovered_story.author.uid)
         # Use dump to create a dictionary
         story_data = story_schema.dump(discovered_story)
         # Pop status and add the name of the author
@@ -54,7 +55,8 @@ class Read(Resource):
         story_data.pop('fans')
         story_data['name'] = discovered_story.author.name
         story_data['uid'] = discovered_story.author.uid
-        story_data['already_liked'] = view_object.target in [like.target for like in active_user_object.favourites]
+        if current_user is not None:
+            story_data['already_liked'] = view_object.target in [like.target for like in active_user_object.favourites]
         return story_data
 
 
