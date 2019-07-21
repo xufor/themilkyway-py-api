@@ -49,9 +49,11 @@ class Story(Resource):
         latest_story_object = StoryModel.force_find_latest_story_by_uid(get_jwt_identity())
         current_time = time.time()
         epoch = datetime.datetime.utcfromtimestamp(0)
-        story_time = (latest_story_object.time - epoch).total_seconds()
-        if (current_time-story_time) < 86400:
-            return {'message': NOT_BEFORE_A_DAY}, 400
+        # Check if there is a latest story or not
+        if latest_story_object is not None:
+            story_time = (latest_story_object.time - epoch).total_seconds()
+            if (current_time-story_time) < 86400:
+                return {'message': NOT_BEFORE_A_DAY}, 400
         # Loaded incoming data into story
         story_object = story_schema.load(request.get_json(), db.session)
         # Check if the the genres is valid or not
