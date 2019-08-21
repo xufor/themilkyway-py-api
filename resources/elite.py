@@ -15,7 +15,7 @@ class Elite(Resource):
             'users': [
                 {
                     'image': elite_user.basic.image
-                    if (elite_user.basic and elite_user.basic.image is not 'no-image')
+                    if (elite_user.basic and elite_user.basic.image != 'no-image')
                     else NO_IMAGE_AVAILABLE,
                     'name': elite_user.name,
                     'uid': elite_user.uid
