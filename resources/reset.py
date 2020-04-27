@@ -42,13 +42,13 @@ class Reset(Resource):
                     }
                 ],
                 'from': {
-                    'email': 'tmw.mission.control@gmail.com',
+                    'email': 'admin@tmw.com',
                     'name': 'Password Reset'
                 },
-                'template_id': 'd-536ca53dd0c4464f96e2333f605d0d16'
+                'template_id': 'Here goes the template id!'
             }
 
-            sg = SendGridAPIClient(os.getenv('EMAIL_API_KEY', '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'))
+            sg = SendGridAPIClient(os.getenv('EMAIL_API_KEY', 'Here goes the default API Key!'))
             response = sg.send(message)
 
             if response.status_code == 202:
