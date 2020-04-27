@@ -37,7 +37,7 @@ TOKEN_REVOKED = 'The token has been revoked. Please login again.'
 TOKEN_EXPIRED = 'The token has expired. Please refresh it.'
 TOKEN_INVALID = 'The token is invalid.'
 
-DB_URL = os.getenv('DB_URL', 'postgresql+psycopg2://postgres:1999@127.0.0.1:5432/themilkyway')
+DB_URL = os.getenv('DB_URL', 'postgresql+psycopg2://postgres:1234@127.0.0.1:5432/themilkyway')
 
 app = Flask(__name__)
 
